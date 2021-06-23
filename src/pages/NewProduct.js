@@ -5,35 +5,35 @@ import apiService from "../services/api-service";
 import "./styles/NewProduct.css";
 
 const NewProduct = () => {
-  const [newProduct, setProduct] = useState({});
+  const [newProduct, setProduct] = useState({ gas: false, balcon: false });
 
   const location = useLocation();
 
   const history = useHistory();
 
   useEffect(() => {
-    console.log(location);
     if (location.pathname.includes("editar")) {
       const id = parseInt(location.pathname.split("/")[2]);
       getData(id);
     }
   }, [location]);
 
-  const getData = async (id) => {
-    const res = await apiService.getOneData(id);
+  const getData = async (itemId) => {
+    const { id, ...res } = await apiService.getOneData(itemId);
     setProduct({ ...res });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     let form_data = new FormData();
-    form_data.append("nombre", newProduct.nombre);
-    form_data.append("descripcion", newProduct.descripcion);
-    form_data.append("precio", newProduct.precio);
-    if (newProduct.imagenUrl)
+    form_data.append("habitaciones", newProduct.habitaciones);
+    form_data.append("banos", newProduct.banos);
+    form_data.append("gas", newProduct.gas);
+    form_data.append("balcon", newProduct.balcon);
+    if (newProduct.imagenUrl) {
       form_data.append("imagen", newProduct.imagen, newProduct.imagen?.name);
-    if (!newProduct.imagen) form_data.append("imagen", null);
-
+    }
+    console.log(form_data.values());
     if (location.pathname.includes("editar")) {
       await apiService.updateData(
         parseInt(location.pathname.split("/")[2]),
@@ -46,14 +46,17 @@ const NewProduct = () => {
   };
 
   const onChange = (e) => {
-    if (e.target.id === "name")
-      setProduct({ ...newProduct, nombre: e.target.value });
+    if (e.target.id === "habitaciones")
+      setProduct({ ...newProduct, habitaciones: e.target.value });
 
-    if (e.target.id === "description")
-      setProduct({ ...newProduct, descripcion: e.target.value });
+    if (e.target.id === "banos")
+      setProduct({ ...newProduct, banos: e.target.value });
 
-    if (e.target.id === "price")
-      setProduct({ ...newProduct, precio: e.target.value });
+    if (e.target.id === "gas")
+      setProduct({ ...newProduct, gas: !newProduct.gas });
+
+    if (e.target.id === "balcon")
+      setProduct({ ...newProduct, balcon: !newProduct.balcon });
   };
 
   const setImage = (e) => {
@@ -77,40 +80,49 @@ const NewProduct = () => {
         <form onSubmit={onSubmit}>
           <div className="row">
             <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="name">Nombre:</label>
-              <input
-                type="text"
-                value={newProduct.nombre}
-                onChange={onChange}
-                className="form-control"
-                id="name"
-                placeholder="Nombre"
-                required
-              />
-            </div>
-            <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="description">Descripción:</label>
-              <input
-                type="text"
-                value={newProduct.descripcion}
-                onChange={onChange}
-                className="form-control"
-                id="description"
-                placeholder="Descripción"
-                required
-              />
-            </div>
-            <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="price">Precio:</label>
+              <label htmlFor="habitaciones">Habitaciones:</label>
               <input
                 type="number"
-                value={newProduct.precio}
+                value={newProduct.habitaciones}
+                onChange={onChange}
+                min="1"
+                className="form-control"
+                id="habitaciones"
+                placeholder="##"
+                required
+              />
+            </div>
+            <div className="form-group row align-items-center mx-2 mb-4">
+              <label htmlFor="banos">Baños:</label>
+              <input
+                type="number"
+                min="0"
+                value={newProduct.banos}
                 onChange={onChange}
                 className="form-control"
-                id="price"
-                min="0"
-                placeholder="$"
+                id="banos"
+                placeholder="##"
                 required
+              />
+            </div>
+            <div className="form-group row align-items-center mx-2 mb-4">
+              <label htmlFor="gas">Gas:</label>
+              <input
+                type="checkbox"
+                value={newProduct.gas}
+                checked={newProduct.gas}
+                onChange={onChange}
+                id="gas"
+              />
+            </div>
+            <div className="form-group row align-items-center mx-2 mb-4">
+              <label htmlFor="balcon">Balcon:</label>
+              <input
+                type="checkbox"
+                value={newProduct.balcon}
+                checked={newProduct.balcon}
+                onChange={onChange}
+                id="balcon"
               />
             </div>
             <div className="form-group row align-items-center mx-2 mb-4">
@@ -118,6 +130,7 @@ const NewProduct = () => {
               <input
                 type="file"
                 accept="image/*"
+                value={newProduct.imagenUrl}
                 onChange={setImage}
                 className="form-control"
                 id="image"
