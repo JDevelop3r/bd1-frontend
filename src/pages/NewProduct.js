@@ -26,16 +26,22 @@ const NewProduct = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     let form_data = new FormData();
-    form_data.append("habitaciones", newProduct.habitaciones);
-    form_data.append("banos", newProduct.banos);
-    form_data.append("gas", newProduct.gas);
-    form_data.append("balcon", newProduct.balcon);
+    form_data.append("dni", parseInt(newProduct.dni));
+    form_data.append("nombre", newProduct.nombre);
+    form_data.append("apellido", newProduct.apellido);
+    form_data.append("segundoApellido", newProduct.segundoApellido);
+
+    if (newProduct.segundoNombre) {
+      form_data.append("segundoNombre", newProduct.segundoNombre || "");
+    }
     if (newProduct.imagenUrl) {
       form_data.append("imagen", newProduct.imagen, newProduct.imagen?.name);
     }
     if (!newProduct.hasOwnProperty("imagen")) {
       form_data.append("imagen", "");
     }
+
+    console.log(newProduct);
 
     if (location.pathname.includes("editar")) {
       await apiService.updateData(
@@ -49,17 +55,20 @@ const NewProduct = () => {
   };
 
   const onChange = (e) => {
-    if (e.target.id === "habitaciones")
-      setProduct({ ...newProduct, habitaciones: e.target.value });
+    if (e.target.id === "dni")
+      setProduct({ ...newProduct, dni: e.target.value });
 
-    if (e.target.id === "banos")
-      setProduct({ ...newProduct, banos: e.target.value });
+    if (e.target.id === "nombre")
+      setProduct({ ...newProduct, nombre: e.target.value });
 
-    if (e.target.id === "gas")
-      setProduct({ ...newProduct, gas: !newProduct.gas });
+    if (e.target.id === "apellido")
+      setProduct({ ...newProduct, apellido: e.target.value });
 
-    if (e.target.id === "balcon")
-      setProduct({ ...newProduct, balcon: !newProduct.balcon });
+    if (e.target.id === "segundoApellido")
+      setProduct({ ...newProduct, segundoApellido: e.target.value });
+
+    if (e.target.id === "segundoNombre")
+      setProduct({ ...newProduct, segundoNombre: e.target.value });
   };
 
   const setImage = (e) => {
@@ -74,58 +83,73 @@ const NewProduct = () => {
   return (
     <div className="NewProduct">
       <div className="row">
-        <h1>Nuevo producto</h1>
+        <h1>Nuevo Estudiante</h1>
         <Link className="btn btn-warning" to="/">
-          Lista de Productos
+          Lista de Estudiantes
         </Link>
       </div>
       <div className="container my-3">
         <form onSubmit={onSubmit}>
           <div className="row">
             <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="habitaciones">Habitaciones:</label>
+              <label htmlFor="dni">DNI:</label>
               <input
                 type="number"
-                value={newProduct.habitaciones}
+                value={newProduct.dni}
                 onChange={onChange}
+                readOnly={location.pathname.includes("editar")}
                 min="1"
                 className="form-control"
-                id="habitaciones"
+                id="dni"
                 placeholder="##"
                 required
               />
             </div>
             <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="banos">Baños:</label>
+              <label htmlFor="nombre">Nombre:</label>
               <input
-                type="number"
-                min="0"
-                value={newProduct.banos}
+                type="text"
+                value={newProduct.nombre}
                 onChange={onChange}
                 className="form-control"
-                id="banos"
-                placeholder="##"
+                id="nombre"
+                placeholder="Nombre"
                 required
               />
             </div>
             <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="gas">Gas:</label>
+              <label htmlFor="segundoNombre">Segundo Nombre:</label>
               <input
-                type="checkbox"
-                value={newProduct.gas}
-                checked={newProduct.gas}
+                type="text"
+                value={newProduct.segundoNombre}
+                className="form-control"
                 onChange={onChange}
-                id="gas"
+                placeholder="Segundo Nombre"
+                id="segundoNombre"
               />
             </div>
             <div className="form-group row align-items-center mx-2 mb-4">
-              <label htmlFor="balcon">Balcon:</label>
+              <label htmlFor="apellido">Apellido:</label>
               <input
-                type="checkbox"
-                value={newProduct.balcon}
-                checked={newProduct.balcon}
+                type="text"
+                value={newProduct.apellido}
+                className="form-control"
                 onChange={onChange}
-                id="balcon"
+                placeholder="Apellido"
+                id="apellido"
+                required
+              />
+            </div>
+            <div className="form-group row align-items-center mx-2 mb-4">
+              <label htmlFor="segundoAapellido">Segundo Apellido:</label>
+              <input
+                type="text"
+                value={newProduct.segundoApellido || ""}
+                className="form-control"
+                onChange={onChange}
+                placeholder="Segundo Apellido"
+                id="segundoApellido"
+                required
               />
             </div>
             <div className="form-group row align-items-center mx-2 mb-4">
@@ -133,18 +157,17 @@ const NewProduct = () => {
               <input
                 type="file"
                 accept="image/*"
-                value={newProduct.imagenUrl}
                 onChange={setImage}
                 className="form-control"
                 id="image"
               />
             </div>
             {newProduct.imagenUrl ? (
-              <img src={newProduct.imagenUrl} alt="Nuevo producto" />
+              <img src={newProduct.imagenUrl} alt="Nuevo Estudiante" />
             ) : newProduct.imagen ? (
               <img
                 src={`http://localhost:8000/${newProduct.imagen}`}
-                alt="Nuevo producto"
+                alt="Nuevo Estudiante"
               />
             ) : (
               <div></div>

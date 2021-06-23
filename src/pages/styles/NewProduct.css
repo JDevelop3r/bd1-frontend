@@ -12,8 +12,8 @@
 
 .row .btn {
   width: 100%;
-} 
+}
 
-input[type=number] {
-  max-width: 80px;
+input[type="number"] {
+  max-width: 130px;
 }

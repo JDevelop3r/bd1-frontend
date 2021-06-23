@@ -8,7 +8,8 @@ const imagePlaceholder =
 const Product = (props) => {
   const history = useHistory();
 
-  const { id, habitaciones, banos, balcon, gas, imagen } = props.item;
+  const { dni, nombre, segundoNombre, apellido, segundoApellido, imagen } =
+    props.item;
 
   const onDelete = props.onDelete;
 
@@ -17,38 +18,25 @@ const Product = (props) => {
       <img
         className="card-img-top"
         src={imagen ? `http://localhost:8000/${imagen}` : imagePlaceholder}
-        alt={id}
+        alt={dni}
       />
       <div className="card-body">
         <p className="card-text">
-          <b>Habitaciones:</b> {habitaciones}
+          <b>DNI:</b> {dni}
         </p>
         <p className="card-text">
-          <b>Baños:</b> {banos}
+          <b>Nombre Completo:</b>{" "}
+          {`${nombre} ${segundoNombre || ""} ${apellido} ${
+            segundoApellido || ""
+          }`}
         </p>
-        <div className="row">
-          <p
-            className={`mx-2 badge badge-pill ${
-              balcon ? "badge-success" : "badge-danger"
-            }`}
-          >
-            Balcon
-          </p>
-          <p
-            className={`mx-2 badge badge-pill ${
-              gas ? "badge-success" : "badge-danger"
-            }`}
-          >
-            Gas
-          </p>
-        </div>
         <div className="row justify-content-center">
-          <button className="btn btn-danger mx-1" onClick={() => onDelete(id)}>
+          <button className="btn btn-danger mx-1" onClick={() => onDelete(dni)}>
             Eliminar
           </button>
           <button
             className="btn btn-warning mx-1"
-            onClick={() => history.push(`/editar/${id}`)}
+            onClick={() => history.push(`/editar/${dni}`)}
           >
             Editar
           </button>
