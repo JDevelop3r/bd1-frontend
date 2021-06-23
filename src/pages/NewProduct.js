@@ -33,7 +33,10 @@ const NewProduct = () => {
     if (newProduct.imagenUrl) {
       form_data.append("imagen", newProduct.imagen, newProduct.imagen?.name);
     }
-    console.log(form_data.values());
+    if (!newProduct.hasOwnProperty("imagen")) {
+      form_data.append("imagen", "");
+    }
+
     if (location.pathname.includes("editar")) {
       await apiService.updateData(
         parseInt(location.pathname.split("/")[2]),
