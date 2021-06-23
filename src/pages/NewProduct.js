@@ -19,8 +19,8 @@ const NewProduct = () => {
     }
   }, [location]);
 
-  const getData = async (id) => {
-    const res = await apiService.getOneData(id);
+  const getData = async (itemId) => {
+    const { id, ...res } = await apiService.getOneData(itemId);
     setProduct({ ...res });
   };
 
@@ -30,9 +30,13 @@ const NewProduct = () => {
     form_data.append("nombre", newProduct.nombre);
     form_data.append("descripcion", newProduct.descripcion);
     form_data.append("precio", newProduct.precio);
-    if (newProduct.imagenUrl)
+    if (newProduct.imagenUrl) {
       form_data.append("imagen", newProduct.imagen, newProduct.imagen?.name);
-    if (!newProduct.imagen) form_data.append("imagen", null);
+    }
+    if (!newProduct.hasOwnProperty("imagen")) {
+      form_data.append("imagen", "");
+      console.log("no");
+    }
 
     if (location.pathname.includes("editar")) {
       await apiService.updateData(
