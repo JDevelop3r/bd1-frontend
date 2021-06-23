@@ -4,7 +4,7 @@ import reportWebVitals from './reportWebVitals';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./global.css";
-import App from "./components/App";
+import App from "./App";
 
 const container = document.getElementById("app");
 

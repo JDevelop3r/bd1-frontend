@@ -1,0 +1,19 @@
+.NewProduct {
+  min-height: calc(100vh - 62px);
+
+  color: black;
+
+  margin: 12px 16px;
+}
+
+.row > * {
+  width: auto;
+}
+
+.row .btn {
+  width: 100%;
+} 
+
+input[type=number] {
+  max-width: 80px;
+}

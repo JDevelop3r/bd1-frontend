@@ -1,0 +1,12 @@
+.card {
+  width: 18rem;
+}
+
+button {
+  max-width: 45% !important;
+}
+
+.badge-success {
+  font-size: 18px;
+  background-color: rgb(80, 228, 80);
+}
