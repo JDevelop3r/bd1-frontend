@@ -5,7 +5,7 @@ import apiService from "../services/api-service";
 import "./styles/NewProduct.css";
 
 const NewProduct = () => {
-  const [newProduct, setProduct] = useState({ gas: false, balcon: false });
+  const [newProduct, setProduct] = useState({});
 
   const location = useLocation();
 
@@ -48,6 +48,7 @@ const NewProduct = () => {
         form_data
       );
     } else {
+      form_data.append("dni", newProduct.dni);
       await apiService.createItem(form_data);
     }
     history.push("/");
