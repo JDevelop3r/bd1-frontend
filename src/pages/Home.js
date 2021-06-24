@@ -29,9 +29,9 @@ const Home = () => {
   return (
     <div className="Home">
       <div className="row">
-        <h1>Productos</h1>
+        <h1>Casas</h1>
         <Link className="btn btn-warning" to="/agregar">
-          Agregar Producto
+          Agregar Casa
         </Link>
       </div>
       <div className="row justify-content-center">

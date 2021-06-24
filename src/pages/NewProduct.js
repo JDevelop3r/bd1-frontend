@@ -74,9 +74,9 @@ const NewProduct = () => {
   return (
     <div className="NewProduct">
       <div className="row">
-        <h1>Nuevo producto</h1>
+        <h1>Nueva Casa</h1>
         <Link className="btn btn-warning" to="/">
-          Lista de Productos
+          Lista de Casas
         </Link>
       </div>
       <div className="container my-3">
@@ -133,18 +133,17 @@ const NewProduct = () => {
               <input
                 type="file"
                 accept="image/*"
-                value={newProduct.imagenUrl}
                 onChange={setImage}
                 className="form-control"
                 id="image"
               />
             </div>
             {newProduct.imagenUrl ? (
-              <img src={newProduct.imagenUrl} alt="Nuevo producto" />
+              <img src={newProduct.imagenUrl} alt="Nueva Casa" />
             ) : newProduct.imagen ? (
               <img
                 src={`http://localhost:8000/${newProduct.imagen}`}
-                alt="Nuevo producto"
+                alt="Nueva Casa"
               />
             ) : (
               <div></div>
