@@ -26,6 +26,10 @@ const Home = () => {
     setProducts([...products]);
   };
 
+  const generateReport = () => {
+    window.open("http://localhost:8000/media/pdf/casas.pdf", "_blank");
+  };
+
   return (
     <div className="Home">
       <div className="row">
@@ -34,6 +38,13 @@ const Home = () => {
           Agregar Casa
         </Link>
       </div>
+      {products.length !== 0 ? (
+        <button className="btn btn-secondary m-3" onClick={generateReport}>
+          Reporte
+        </button>
+      ) : (
+        <div></div>
+      )}
       <div className="row justify-content-center">
         {products.map((el) => (
           <div key={el.id} className="m-2" style={{ width: "auto" }}>
