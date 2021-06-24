@@ -26,7 +26,6 @@ const NewProduct = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     let form_data = new FormData();
-    form_data.append("dni", parseInt(newProduct.dni));
     form_data.append("nombre", newProduct.nombre);
     form_data.append("apellido", newProduct.apellido);
     form_data.append("segundoApellido", newProduct.segundoApellido);
