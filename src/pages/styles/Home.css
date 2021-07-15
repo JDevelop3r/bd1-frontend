@@ -1,5 +1,5 @@
 .Home {
-  min-height: calc(100vh - 62px);
+  min-height: calc(100vh - (70px + 1rem));
 
   color: black;
 
