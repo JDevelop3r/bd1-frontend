@@ -12,23 +12,6 @@
   margin: 0 1.8em;
 }
 
-.Authenticate__container {
-  background-color: #fefefe;
-  border-radius: 21px;
-  box-shadow: 2px 10px 15px -7px #000000;
-  padding: 1.2em 1.6em;
-  margin: 0 1.8em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  -webkit-box-shadow: 2px 10px 15px -7px #000000;
-}
-
-.Authenticate__container a {
-  text-decoration: none;
-}
-
 input,
 select {
   margin: 0.3em;

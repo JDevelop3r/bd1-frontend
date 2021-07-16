@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Card from "./Card";
 
 const Register = () => {
   const [type, setType] = useState(false);
@@ -250,7 +251,7 @@ const Register = () => {
   };
 
   return (
-    <div className="Authenticate__container">
+    <Card>
       <h2>Registro {type ? "Coleccionista" : "Empresa"}</h2>
       <form
         className="d-flex flex-column align-items-center"
@@ -285,7 +286,7 @@ const Register = () => {
           ¿Ya tienes una cuenta? <a href="/login">Iniciar Sesión</a>
         </b>
       </span>
-    </div>
+    </Card>
   );
 };
 

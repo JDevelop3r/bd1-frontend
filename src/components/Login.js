@@ -1,10 +1,11 @@
 import React from "react";
+import Card from "./Card";
 
 const Login = () => {
   const handleLogin = () => {};
 
   return (
-    <div className="Authenticate__container">
+    <Card>
       <h2>Iniciar Sesión</h2>
       <div className="my-2"></div>
       <h5 htmlFor="cuenta">Selecciona una cuenta</h5>
@@ -27,7 +28,7 @@ const Login = () => {
           ¿No tienes una cuenta todavía? <a href="/register">Registrate</a>
         </b>
       </span>
-    </div>
+    </Card>
   );
 };
 
