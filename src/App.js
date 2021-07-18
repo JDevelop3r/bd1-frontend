@@ -4,6 +4,13 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Authenticate from "./pages/Authenticate";
+import OrganizacionesPage from "./pages/OrganizacionesPage";
+import EventosPage from "./pages/EventosPage";
+import DetalleEvento from "./pages/DetalleEvento";
+import FichaColeccionista from "./pages/FichaColeccionista";
+import FichaOrganizacion from "./pages/FichaOrganizacion";
+import FichaObjeto from "./pages/FichaObjeto";
+import CrearObjeto from "./pages/CrearObjeto";
 
 function App() {
   return (
@@ -14,6 +21,18 @@ function App() {
           <Route exact path="/home" component={Home} />
           <Route exact path="/login" component={Authenticate} />
           <Route exact path="/register" component={Authenticate} />
+          <Route exact path="/organizaciones" component={OrganizacionesPage} />
+          <Route exact path="/eventos" component={EventosPage} />
+          <Route exact path="/evento/:id" component={DetalleEvento} />
+          <Route
+            exact
+            path="/coleccionista/:id"
+            component={FichaColeccionista}
+          />
+          <Route exact path="/organizacion/:id" component={FichaOrganizacion} />
+          <Route exact path="/objeto/:type/:id" component={FichaObjeto} />
+          <Route exact path="/crear/:type" component={CrearObjeto} />
+          <Route exact path="/editar/:type/:id" component={CrearObjeto} />
         </div>
       </Layout>
     </BrowserRouter>

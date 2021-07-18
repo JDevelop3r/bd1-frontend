@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Card from "./Card";
 
 const OrganizacionPreview = (props) => {
-  const { id, imgURL, nombre, proposito, fundacion, pagWeb, direccion } = props;
+  const { id, imgURL, nombre, proposito, fundacion, pagWeb, direccion } =
+    props.organizacion;
 
   const onClickVerOrganizacion = () => {
     console.log(id);
@@ -10,8 +12,8 @@ const OrganizacionPreview = (props) => {
 
   return (
     <Card>
-      <div className="d-flex">
-        <div className="col mr-4">
+      <div className="row align-items-center">
+        <div className="col-5">
           <h3>{nombre}</h3>
           <p>
             <b>Proposito:</b> {proposito}
@@ -27,18 +29,16 @@ const OrganizacionPreview = (props) => {
           </p>
         </div>
 
-        <div className="col">
-          <button
-            onClick={onClickVerOrganizacion}
-            className="btn btn-secondary"
-          >
+        <div className="col-3">
+          <Link to={`/organizacion/${id}`} className="btn btn-secondary btn-sm">
             VER
             <br />
             ORGANIZACIÓN
-          </button>
+          </Link>
         </div>
-
-        <img src={imgURL} alt={nombre} />
+        <div className="col-4 ">
+          <img className="img-fluid" src={imgURL} alt={nombre} />
+        </div>
       </div>
     </Card>
   );

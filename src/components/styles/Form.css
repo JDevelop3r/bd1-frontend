@@ -1,0 +1,7 @@
+input[type="file"] {
+  max-width: 300px;
+}
+
+input[type="text"] {
+  max-width: 200px;
+}

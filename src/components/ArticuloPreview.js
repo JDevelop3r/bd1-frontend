@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import Card from "./Card";
+import "./styles/Articulo.css";
 
 const ArticuloPreview = (props) => {
   const {
@@ -14,7 +17,7 @@ const ArticuloPreview = (props) => {
     dimensiones,
     bid,
     ask,
-  } = props;
+  } = props.articulo;
 
   const onClickVer = () => {
     console.log(id);
@@ -23,7 +26,7 @@ const ArticuloPreview = (props) => {
   return (
     <Card>
       <div className="col justify-content-center">
-        <img src={imgURL} alt={nombre} />
+        <img className="img-fluid imgMaxSize" src={imgURL} alt={nombre} />
         <h4 className="text-align-center">{nombre}</h4>
         <div className="preview-content">
           <p>
@@ -75,9 +78,9 @@ const ArticuloPreview = (props) => {
             ""
           )}
         </div>
-        <button onClick={onClickVer} className="btn btn-primary">
+        <Link to={`/objeto/${id}`} className="btn btn-primary">
           VER
-        </button>
+        </Link>
       </div>
     </Card>
   );

@@ -12,8 +12,8 @@ const Navbar = () => {
       <Link
         className={
           location.pathname.includes("home")
-            ? "Navbar__brand"
-            : "Navbar__brand active"
+            ? "Navbar__brand active"
+            : "Navbar__brand"
         }
         to="/home"
       >
@@ -23,29 +23,29 @@ const Navbar = () => {
       <div className="Navbar__options">
         <Link
           className={
-            location.pathname.includes("home")
-              ? "Navbar__brand"
-              : "Navbar__brand active"
+            location.pathname.includes("organizaciones")
+              ? "Navbar__brand active"
+              : "Navbar__brand"
           }
-          to="/home"
+          to="/organizaciones"
         >
           <span>Organizaciones</span>
         </Link>
         <Link
           className={
-            location.pathname.includes("home")
-              ? "Navbar__brand"
-              : "Navbar__brand active"
+            location.pathname.includes("eventos")
+              ? "Navbar__brand active"
+              : "Navbar__brand"
           }
-          to="/home"
+          to="/eventos"
         >
           <span>Eventos</span>
         </Link>
         <Link
           className={
             location.pathname.includes("login")
-              ? "Navbar__brand"
-              : "Navbar__brand active"
+              ? "Navbar__brand active"
+              : "Navbar__brand"
           }
           to="/login"
         >
