@@ -30,8 +30,37 @@ const createItem = async (form_data) => {
   console.log(res);
 };
 
+const getDivisas = async () => {
+  const res = await axios.get(`${BASE_URL}divisa/`);
+  console.log(res.data);
+  return res.data;
+};
+
+const getOrganizaciones = async () => {
+  const res = await axios.get(`${BASE_URL}organizacion/`);
+  console.log(res.data);
+  return res.data;
+};
+
+const getPaises = async () => {
+  const res = await axios.get(`${BASE_URL}pais/`);
+  console.log(res.data);
+  return res.data;
+};
+
+const crearMoneda = async (form_data) => {
+  const res = await axios.post(`${BASE_URL}moneda`, form_data, {
+    headers: { "content-type": "multipart/form-data" },
+  });
+  console.log(res);
+};
+
 const apiService = {
   getData,
+  getOrganizaciones,
+  getPaises,
+  getDivisas,
+  crearMoneda,
   deleteItem,
   createItem,
   getOneData,

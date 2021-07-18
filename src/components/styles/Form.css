@@ -2,6 +2,17 @@ input[type="file"] {
   max-width: 300px;
 }
 
-input[type="text"] {
-  max-width: 200px;
+textarea {
+  max-height: 70px;
+  min-height: 70px !important;
+  margin-bottom: 6px;
+}
+
+.completo {
+  max-width: auto;
+}
+
+input,
+select {
+  max-width: 200px !important;
 }

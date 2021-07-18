@@ -5,39 +5,65 @@ import Card from "../components/Card";
 import FormCrearMoneda from "../components/FormCrearMoneda";
 import FormCrearPintura from "../components/FormCrearPintura";
 import imgPlaceholder from "../images/placeholder-image.png";
+import apiService from "../services/api-service";
 
 const CrearObjeto = () => {
   const { type, id } = useParams();
-  const [objeto, setObjeto] = useState({});
+  const [img, setImg] = useState({});
 
   useEffect(() => {
     if (!id) return;
     let res;
     if (type === "moneda") {
-      res = objeto;
+      res = img;
     } else {
-      res = objeto;
+      res = img;
     }
-    setObjeto(res);
-  }, [id, type, objeto]);
+    setImg(res);
+  }, [id, type, img]);
+
+  const onSubmit = (form) => {
+    console.log(form);
+    let form_data = new FormData();
+    for (const key in form) {
+      form_data.append(key, form[key]);
+    }
+    if (img.file) {
+      form_data.append("imagen", img.file);
+    }
+    apiService.crearMoneda(form_data);
+  };
+
+  const onChangeImg = (e) => {
+    setImg({
+      url: URL.createObjectURL(e.target.files[0]),
+      file: e.target.files[0],
+    });
+  };
 
   return (
     <main className="container d-flex justify-content-center flex-wrap mt-2">
       <section>
         <h2>Crear {type}</h2>
         <Card>
-          <img
-            src={objeto.imgURL ?? imgPlaceholder}
-            alt=""
-            className="img-fluid"
-          />
+          <img src={img.url ?? imgPlaceholder} alt="" className="img-fluid" />
           <div className="form-group">
-            <input type="file" id="imgInput" className="form-control" />
+            <input
+              onChange={onChangeImg}
+              type="file"
+              accept=".png,.jpg,.jpeg,.gif"
+              id="imgInput"
+              className="form-control"
+            />
           </div>
         </Card>
       </section>
       <section>
-        {type === "moneda" ? <FormCrearMoneda /> : <FormCrearPintura />}
+        {type === "moneda" ? (
+          <FormCrearMoneda onSubmit={onSubmit} />
+        ) : (
+          <FormCrearPintura />
+        )}
       </section>
     </main>
   );
