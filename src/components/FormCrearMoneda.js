@@ -90,8 +90,8 @@ const FormCrearMoneda = (props) => {
             onChange={onChangeInputs}
             required
             type="text"
-            maxlength="30"
-            minlength="1"
+            maxLength="30"
+            minLength="1"
             placeholder="Nombre"
             id="nombre"
             value={moneda.nombre}
@@ -201,7 +201,7 @@ const FormCrearMoneda = (props) => {
             required
             type="text"
             id="acunacion"
-            maxlength="100"
+            maxLength="100"
             placeholder="Acuñación"
             value={moneda.acunacion}
             className="form-control"
@@ -259,7 +259,7 @@ const FormCrearMoneda = (props) => {
             onChange={onChangeInputs}
             required
             id="motivo"
-            maxlength="100"
+            maxLength="100"
             placeholder="Motivo"
             value={moneda.motivo}
             className="form-control completo"

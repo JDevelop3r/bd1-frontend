@@ -118,7 +118,7 @@ const Register = () => {
         <input
           className="form-control"
           type="text"
-          maxlength="50"
+          maxLength="50"
           placeholder="Página web"
           value={empresa.pagWeb}
           onChange={onChangePagWeb}
@@ -127,7 +127,7 @@ const Register = () => {
         <input
           className="form-control"
           type="tel"
-          maxlength="20"
+          maxLength="20"
           pattern="[0-9\s]{2,3}[0-9]{3,}-[0-9]{3,}-[0-9]{4,}"
           placeholder="Teléfono: (58 426-111-2233)"
           value={empresa.telefono}
@@ -284,7 +284,7 @@ const Register = () => {
           <input
             className="form-control"
             type="email"
-            maxlength="50"
+            maxLength="50"
             placeholder="Correo electrónico"
             value={type ? coleccionista.email : empresa.email}
             onChange={onChangeEmail}

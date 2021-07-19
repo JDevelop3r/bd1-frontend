@@ -49,8 +49,8 @@ const FormCrearPintura = (props) => {
             onChange={onChangeInputs}
             required
             type="text"
-            maxlength="100"
-            minlength="1"
+            maxLength="100"
+            minLength="1"
             placeholder="Título"
             id="titulo"
             value={pintura.titulo}
@@ -63,8 +63,8 @@ const FormCrearPintura = (props) => {
             required
             type="text"
             pattern="[0-9]+x[0-9]"
-            maxlength="30"
-            minlength="1"
+            maxLength="30"
+            minLength="1"
             placeholder="Dimensiones (#x#)"
             id="dimensiones"
             value={pintura.dimensiones}
@@ -92,8 +92,8 @@ const FormCrearPintura = (props) => {
             onChange={onChangeInputs}
             required
             type="text"
-            maxlength="30"
-            minlength="1"
+            maxLength="30"
+            minLength="1"
             placeholder="Estilo"
             id="estilo"
             value={pintura.estilo}
