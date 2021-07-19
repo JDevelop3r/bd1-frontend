@@ -11,6 +11,7 @@ import FichaColeccionista from "./pages/FichaColeccionista";
 import FichaOrganizacion from "./pages/FichaOrganizacion";
 import FichaObjeto from "./pages/FichaObjeto";
 import CrearObjeto from "./pages/CrearObjeto";
+import Subasta from './pages/subasta';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/objeto/:type/:id" component={FichaObjeto} />
           <Route exact path="/crear/:type" component={CrearObjeto} />
           <Route exact path="/editar/:type/:id" component={CrearObjeto} />
+          <Route exact path="/subasta" component={Subasta} />
         </div>
       </Layout>
     </BrowserRouter>
