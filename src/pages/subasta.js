@@ -33,12 +33,14 @@ const subasta = () => {
         <div class="col">
           <h3>Pujas</h3>  
           <Card>
+              <div class="container">
+                <div class="row">
+                  <div class="col"><h4>Coleccionista</h4></div>
+                  <div class="col"><h4>Oferta</h4></div>
+                </div>
+              </div>
             {coleccionista.map((coleccionista) => (
             <div class="container">
-              <div class="row">
-                <div class="col"><h4>Coleccionista</h4></div>
-                <div class="col"><h4>Oferta</h4></div>
-              </div>
               <div class="row justify-content-center">
                 <div class="col"><p>{coleccionista.nombre}</p></div>
                 <div class="col"><p>{coleccionista.oferta}</p></div>

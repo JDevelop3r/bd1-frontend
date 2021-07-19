@@ -13,6 +13,7 @@ import FichaObjeto from "./pages/FichaObjeto";
 import CrearObjeto from "./pages/CrearObjeto";
 import Subasta from "./pages/subasta";
 import NuevoArtista from "./pages/NuevoArtista";
+import artistas from "./pages/artistas";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route exact path="/editar/:type/:id" component={CrearObjeto} />
           <Route exact path="/subasta" component={Subasta} />
           <Route exact path="/artista" component={NuevoArtista} />
+          <Route exact path="/artistas" component={artistas} />
         </div>
       </Layout>
     </BrowserRouter>
