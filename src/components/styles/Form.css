@@ -1,8 +1,8 @@
-input[type="file"] {
+.Form input[type="file"] {
   max-width: 300px;
 }
 
-textarea {
+.Form textarea {
   max-height: 70px;
   min-height: 70px !important;
   margin-bottom: 6px;
@@ -12,7 +12,7 @@ textarea {
   max-width: auto;
 }
 
-input,
-select {
+.Form input,
+.Form select {
   max-width: 200px !important;
 }

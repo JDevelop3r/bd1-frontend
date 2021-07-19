@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import Card from "../components/Card";
 import FormCrearMoneda from "../components/FormCrearMoneda";
@@ -10,6 +10,8 @@ import apiService from "../services/api-service";
 const CrearObjeto = () => {
   const { type, id } = useParams();
   const [img, setImg] = useState({});
+
+  const history = useHistory();
 
   useEffect(() => {
     if (!id) return;
@@ -22,7 +24,7 @@ const CrearObjeto = () => {
     setImg(res);
   }, [id, type, img]);
 
-  const onSubmit = (form) => {
+  const onSubmit = async (form) => {
     console.log(form);
     let form_data = new FormData();
     for (const key in form) {
@@ -31,7 +33,11 @@ const CrearObjeto = () => {
     if (img.file) {
       form_data.append("imagen", img.file);
     }
-    apiService.crearMoneda(form_data);
+    const res =
+      type === "moneda"
+        ? await apiService.crearMoneda(form_data)
+        : await apiService.crearPintura(form_data);
+    if (res.status === 200 || res.status === 201) history.push("/");
   };
 
   const onChangeImg = (e) => {
@@ -62,7 +68,7 @@ const CrearObjeto = () => {
         {type === "moneda" ? (
           <FormCrearMoneda onSubmit={onSubmit} />
         ) : (
-          <FormCrearPintura />
+          <FormCrearPintura onSubmit={onSubmit} />
         )}
       </section>
     </main>

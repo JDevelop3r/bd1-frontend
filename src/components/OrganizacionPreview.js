@@ -3,30 +3,26 @@ import { Link } from "react-router-dom";
 import Card from "./Card";
 
 const OrganizacionPreview = (props) => {
-  const { id, imgURL, nombre, proposito, fundacion, pagWeb, direccion } =
-    props.organizacion;
-
-  const onClickVerOrganizacion = () => {
-    console.log(id);
-  };
+  const { id, nombre, proposito, fundacion, paginaWeb } = props.organizacion;
 
   return (
     <Card>
       <div className="row align-items-center">
-        <div className="col-5">
+        <div className="col-9">
           <h3>{nombre}</h3>
           <p>
             <b>Proposito:</b> {proposito}
           </p>
-          <p>
-            <b>Fundacion:</b> {fundacion}
-          </p>
-          <p>
-            <b>Página Web:</b> {pagWeb}
-          </p>
-          <p>
-            <b>Dirección:</b> {direccion}
-          </p>
+          <div className="row">
+            <p>
+              <span className="mx-2">
+                <b>Fundacion:</b> {fundacion}
+              </span>
+              <span className="mr-2">
+                <b>Página Web:</b> {paginaWeb}
+              </span>
+            </p>
+          </div>
         </div>
 
         <div className="col-3">
@@ -35,9 +31,6 @@ const OrganizacionPreview = (props) => {
             <br />
             ORGANIZACIÓN
           </Link>
-        </div>
-        <div className="col-4 ">
-          <img className="img-fluid" src={imgURL} alt={nombre} />
         </div>
       </div>
     </Card>

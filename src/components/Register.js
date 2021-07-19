@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import apiService from "../services/api-service";
 import Card from "./Card";
 
 const Register = () => {
   const [type, setType] = useState(false);
   const [empresa, setEmpresa] = useState({});
   const [coleccionista, setColeccionista] = useState({});
+  const [paises, setPaises] = useState([]);
+
+  const loadData = async () => {
+    const res = await apiService.getPaises();
+    setPaises(res);
+  };
+
+  useEffect(() => loadData(), []);
 
   const handleChangeType = (e) => {
     setType(!type);
@@ -38,19 +47,15 @@ const Register = () => {
     setEmpresa({ ...empresa, fundacion: e.target.value });
 
   const onChangePagWeb = (e) =>
-    setEmpresa({ ...empresa, pagWeb: e.target.value });
+    setEmpresa({ ...empresa, paginaWeb: e.target.value });
 
   const onChangeDireccion = (e) =>
-    setEmpresa({ ...empresa, direccion: e.target.value });
+    setEmpresa({ ...empresa, id_pais: e.target.value });
+
+  const onChangeTipo = (e) => setEmpresa({ ...empresa, tipo: e.target.value });
 
   const onChangeAlcance = (e) =>
     setEmpresa({ ...empresa, alcance: e.target.value });
-
-  const onChangeEnvioNacional = (e) =>
-    setEmpresa({ ...empresa, envNacional: e.target.value });
-
-  const onChangeEnvioInternacional = (e) =>
-    setEmpresa({ ...empresa, envInternacional: e.target.value });
 
   const onChangeSegundoNombre = (e) =>
     setColeccionista({ ...coleccionista, segundoNombre: e.target.value });
@@ -88,17 +93,22 @@ const Register = () => {
           required
         />
         <div className="d-flex justify-content-center">
-          <input
-            className="Authenticate__container-input form-control"
-            type="text"
-            placeholder="Proposito"
-            value={empresa.proposito}
-            onChange={onChangeProposito}
+          <select
+            className="form-control"
+            name="alcance"
+            value={empresa.alcance}
+            onChange={onChangeAlcance}
             required
-          />
+          >
+            <option value="">Alcance</option>
+            <option value="nacional">Nacional</option>
+            <option value="internacional">Internacional</option>
+          </select>
           <input
             className="Authenticate__container-input form-control"
-            type="text"
+            type="number"
+            max="2021"
+            min="1"
             placeholder="Fundación"
             value={empresa.fundacion}
             onChange={onChangeFundacion}
@@ -108,6 +118,7 @@ const Register = () => {
         <input
           className="form-control"
           type="text"
+          maxlength="50"
           placeholder="Página web"
           value={empresa.pagWeb}
           onChange={onChangePagWeb}
@@ -115,44 +126,48 @@ const Register = () => {
         />
         <input
           className="form-control"
-          type="text"
-          placeholder="Dirección"
-          value={empresa.direccion}
-          onChange={onChangeDireccion}
+          type="tel"
+          maxlength="20"
+          pattern="[0-9\s]{2,3}[0-9]{3,}-[0-9]{3,}-[0-9]{4,}"
+          placeholder="Teléfono: (58 426-111-2233)"
+          value={empresa.telefono}
+          onChange={onChangeTelefono}
           required
         />
-        <select
-          name="alcance"
-          value={empresa.alcance}
-          onChange={onChangeAlcance}
-          required
-        >
-          <option value="">Alcance</option>
-          <option value="nacional">Nacional</option>
-          <option value="internacional">Internacional</option>
-        </select>
         <div className="d-flex justify-content-center">
-          <input
-            className="Authenticate__container-input form-control"
-            type="number"
-            placeholder="Envio Nacional"
-            value={empresa.envNacional}
-            onChange={onChangeEnvioNacional}
+          <select
+            className="form-control"
+            value={empresa.id_pais}
+            onChange={onChangeDireccion}
             required
-          />
-          {empresa.alcance === "internacional" ? (
-            <input
-              className="Authenticate__container-input form-control"
-              type="number"
-              placeholder="Envio Internacional"
-              value={empresa.envInternacional}
-              onChange={onChangeEnvioInternacional}
-              required
-            />
-          ) : (
-            ""
-          )}
+          >
+            <option value="">País</option>
+            {paises.map((pais) => (
+              <option key={pais.id} value={pais.id}>
+                {pais.nombre}
+              </option>
+            ))}
+          </select>
+
+          <select
+            onChange={onChangeTipo}
+            value={empresa.tipo}
+            className="form-control"
+          >
+            <option value="">Tipo</option>
+            <option value="galeria">Galeria</option>
+            <option value="tienda">Tienda</option>
+            <option value="otro">Otro</option>
+          </select>
         </div>
+        <input
+          className="form-control"
+          type="text"
+          placeholder="Proposito"
+          value={empresa.proposito}
+          onChange={onChangeProposito}
+          required
+        />
       </div>
     );
   };
@@ -255,7 +270,6 @@ const Register = () => {
       <h2>Registro {type ? "Coleccionista" : "Empresa"}</h2>
       <form
         className="d-flex flex-column align-items-center"
-        action=""
         onSubmit={handleRegister}
       >
         <button
@@ -270,6 +284,7 @@ const Register = () => {
           <input
             className="form-control"
             type="email"
+            maxlength="50"
             placeholder="Correo electrónico"
             value={type ? coleccionista.email : empresa.email}
             onChange={onChangeEmail}

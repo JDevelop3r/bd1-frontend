@@ -84,7 +84,7 @@ const FormCrearMoneda = (props) => {
 
   return (
     <Card>
-      <form onSubmit={onSubmit}>
+      <form className="Form" onSubmit={onSubmit}>
         <div className="row form-group">
           <input
             onChange={onChangeInputs}
