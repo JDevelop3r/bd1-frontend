@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import EventoPreview from "../components/EventoPreview";
+import apiService from "../services/api-service";
 
 import "./styles/List.css";
 
 const EventosPage = () => {
-  const eventos = [
+  const [eventos, setEventos] = useState([]);
+
+  const loadData = async () => {
+    const resEventos = await apiService.getEventos();
+    setEventos(resEventos);
+  };
+
+  useEffect(() => loadData(), []);
+
+  /* const eventos = [
     {
       id: "0",
       imgURL:
@@ -54,7 +64,7 @@ const EventosPage = () => {
       lugar: "Calle 4 Ciudad 4 Pais 4",
     },
   ];
-
+ */
   return (
     <main className="container mt-3">
       <h2>Eventos</h2>

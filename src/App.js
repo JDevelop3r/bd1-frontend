@@ -13,6 +13,9 @@ import FichaObjeto from "./pages/FichaObjeto";
 import CrearObjeto from "./pages/CrearObjeto";
 import Subasta from "./pages/subasta";
 import NuevoArtista from "./pages/NuevoArtista";
+import CrearEvento from "./pages/CrearEvento";
+import Page404 from "./pages/404Page";
+import ArtistaObjeto from "./pages/ArtistaObjeto";
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
           <Route exact path="/editar/:type/:id" component={CrearObjeto} />
           <Route exact path="/subasta" component={Subasta} />
           <Route exact path="/artista" component={NuevoArtista} />
+          <Route exact path="/crear-evento" component={CrearEvento} />
+          <Route exact path="/404" component={Page404} />
+          <Route exact path="/agregar-artista" component={ArtistaObjeto} />
         </div>
       </Layout>
     </BrowserRouter>

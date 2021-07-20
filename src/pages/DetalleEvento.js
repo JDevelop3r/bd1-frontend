@@ -1,10 +1,24 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import Card from "../components/Card";
 import ArticuloPreview from "../components/ArticuloPreview";
+import apiService from "../services/api-service";
 
 const DetalleEvento = () => {
   const { id } = useParams();
+  const history = useHistory();
+  const [evento, setEvento] = useState({});
+
+  const loadData = async () => {
+    try {
+      const resEvento = await apiService.getEvento(id);
+      setEvento(resEvento);
+    } catch (error) {
+      history.push("/404");
+    }
+  };
+
+  useEffect(() => loadData(), []);
 
   const articulos = [
     {
@@ -45,18 +59,8 @@ const DetalleEvento = () => {
     },
   ];
 
-  const evento = {
-    id: "0",
-    imgURL:
-      "https://www.marquid.com/wp-content/uploads/2017/06/6197706_orig.jpg",
-    fecha: "27/07/2021",
-    organizadores: "Organizador 1",
-    tipo: "Presencial",
-    duracion: "90",
-    entrada: "50",
-    entradaNuevo: "75",
-    lugar: "Calle 1 Ciudad 1 Pais 1",
-    articulos,
+  const onClickInscribirme = () => {
+    console.log(id);
   };
 
   return (
@@ -64,48 +68,83 @@ const DetalleEvento = () => {
       <h2>Detalle Evento {id}</h2>
 
       <Card>
-        <div className="col-12">
-          <h4>{evento.fecha}</h4>
-          <p>
-            <b>Organizador(es): </b> {evento.organizadores}
-          </p>
-          <div className="row">
-            <div className="col-3">
-              <p>
-                <b>Tipo: </b>
-                {evento.tipo}
-              </p>
+        <div className="row">
+          <div className="col-9">
+            <h4>{evento.fecha}</h4>
+            <p>
+              <b>Organizador(es):</b>{" "}
+              {evento.planificadores?.map((planificador, index) => (
+                <span className="mr-1" key={planificador.id}>
+                  &nbsp;&nbsp;{planificador.nombre}.
+                </span>
+              ))}
+            </p>
+            <div className="row">
+              <div className="col-3">
+                <p>
+                  <b>Tipo: </b>
+                  {evento.tipo}
+                </p>
+              </div>
+              <div className="col-3">
+                <p>
+                  <b>Tipo de Puja: </b>
+                  {evento.tipoPuja}
+                </p>
+              </div>
+              <div className="col-2">
+                <p>
+                  <b>Duración: </b>
+                  {evento.duracionHoras}
+                </p>
+              </div>
+              <div className="col-7">
+                {evento.lugar ? (
+                  <p>
+                    <b>Lugar:</b> {evento.lugar}, {evento.pais.nombre}
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
-            <div className="col-2">
-              <p>
-                <b>Duración: </b>
-                {evento.duracion}
-              </p>
-            </div>
-            <div className="col-7">
-              <p>
-                <b>Lugar: </b>
-                {evento.lugar}
-              </p>
+            <div className="row">
+              <div className="col-3">
+                <p>
+                  <b>Entrada:</b> ${evento.inscripcionCliente}
+                </p>
+              </div>
+              {evento.inscripcionClienteNuevo ? (
+                <div className="col-3">
+                  <p>
+                    <b>Entrada nuevo:</b> ${evento.inscripcionClienteNuevo}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="col-3">
+                <p>
+                  <b>Articulos: </b>
+                  {articulos.length}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-2">
-              <p>
-                <b>Entrada: </b>${evento.entrada}
-              </p>
-            </div>
-            <div className="col-3">
-              <p>
-                <b>Entrada nuevo: </b>${evento.entradaNuevo}
-              </p>
-            </div>
-            <div className="col-3">
-              <p>
-                <b>Articulos: </b>
-                {articulos.length}
-              </p>
-            </div>
+          <div className="col-3">
+            <span className="badge bg-warning rounded-pill text-dark">
+              {evento.status}
+            </span>
+            {evento.status === "Pendiente" ? (
+              <button
+                onClick={onClickInscribirme}
+                className="btn btn-primary my-1"
+              >
+                INSCRIBIRME
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </Card>

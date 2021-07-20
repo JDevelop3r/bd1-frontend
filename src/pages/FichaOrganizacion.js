@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Card from "../components/Card";
 import apiService from "../services/api-service";
 
 const FichaOrganizacion = () => {
   const { id } = useParams();
-
+  const history = useHistory();
   const [organizacion, setOrganizacion] = useState({});
 
   const loadData = async () => {
-    const res = await apiService.getOrganizacion(id);
-    setOrganizacion(res);
+    try {
+      const res = await apiService.getOrganizacion(id);
+      setOrganizacion(res);
+    } catch (error) {
+      history.push("/404");
+    }
   };
 
   useEffect(() => loadData(), []);
