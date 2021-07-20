@@ -3,3 +3,8 @@
   align-items: center;
   flex-direction: column;
 }
+
+.list-overflow {
+  max-height: 75vh;
+  overflow: auto;
+}

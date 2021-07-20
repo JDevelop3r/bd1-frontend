@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import Card from "../components/Card";
 import FormCrearArtista from "../components/FormArtista";
 import apiService from "../services/api-service";
+import ArtistasList from "./ArtistasList";
 
 const NuevoArtista = () => {
   const history = useHistory();
+
+  const [artistas, setArtistas] = useState([]);
+
+  const loadData = async () => {
+    const resArtistas = await apiService.getArtistas();
+    setArtistas(resArtistas);
+  };
+
+  useEffect(() => loadData(), []);
 
   const onSubmit = async (form) => {
     console.log(form);
@@ -19,6 +29,9 @@ const NuevoArtista = () => {
       <section>
         <h2>Nuevo Artista</h2>
         <FormCrearArtista onSubmit={onSubmit} />
+      </section>
+      <section>
+        <ArtistasList artistas={artistas} />
       </section>
     </main>
   );
