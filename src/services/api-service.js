@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const BASE_URL = "http://localhost:8000/";
 
@@ -20,7 +19,7 @@ const Logout = () => {
 };
 
 const getToken = () => {
-  return localStorage.getItem("token");
+  return localStorage.getItem("token") ?? null;
 };
 
 const registerColeccionista = async (user) => {
@@ -70,7 +69,7 @@ const getColeccionistas = async () => {
 };
 
 const inscribirEnEvento = async (idEvento) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(
     `${BASE_URL}participante/inscripcion/${idEvento}`,
     {},
@@ -83,7 +82,7 @@ const inscribirEnEvento = async (idEvento) => {
 };
 
 const getEventos = async () => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.get(`${BASE_URL}evento/`, {
     headers: { TOKEN: token },
   });
@@ -92,7 +91,7 @@ const getEventos = async () => {
 };
 
 const getEventosOrganizacion = async (organizacionId) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.get(`${BASE_URL}evento/eventos/${organizacionId}`, {
     headers: { TOKEN: token },
   });
@@ -119,7 +118,7 @@ const getPaises = async () => {
 };
 
 const crearMoneda = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}moneda`, form_data, {
     headers: { "content-type": "multipart/form-data", TOKEN: token },
   });
@@ -157,6 +156,16 @@ const getPinturaNur = async (nur) => {
   return res.data;
 };
 
+const getCatalogoOrganizadores = async (organizaciones) => {
+  const res = await axios.post(
+    `${BASE_URL}catalogo/organizaciones`,
+    { id_organizaciones: organizaciones },
+    { headers: { "content-type": "application/json" } }
+  );
+  console.log(res.data);
+  return res.data;
+};
+
 const getPinturaId = async (id) => {
   const res = await axios.get(`${BASE_URL}catalogo/pintura/obj/${id}`);
   console.log(res.data);
@@ -164,7 +173,7 @@ const getPinturaId = async (id) => {
 };
 
 const crearPintura = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}catalogo/pintura`, form_data, {
     headers: { "content-type": "multipart/form-data", TOKEN: token },
   });
@@ -179,7 +188,7 @@ const getArtistas = async () => {
 };
 
 const crearArtista = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
@@ -188,7 +197,7 @@ const crearArtista = async (form_data) => {
 };
 
 const agregarArtistaMoneda = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}moneda_artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
@@ -197,7 +206,7 @@ const agregarArtistaMoneda = async (form_data) => {
 };
 
 const agregarContacto = async (form_data, mandarToken) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const headers = { "content-type": "application/json" };
   if (mandarToken) headers.TOKEN = token;
   const res = await axios.post(`${BASE_URL}contacto`, form_data, {
@@ -208,7 +217,7 @@ const agregarContacto = async (form_data, mandarToken) => {
 };
 
 const agregarArtistaPintura = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}pintura_artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
@@ -217,10 +226,23 @@ const agregarArtistaPintura = async (form_data) => {
 };
 
 const crearEvento = async (form_data) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await axios.post(`${BASE_URL}evento`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
+  console.log(res);
+  return res;
+};
+
+const agregarSubastasAEvento = async (ordenes, id_evento) => {
+  const token = getToken();
+  const res = await axios.post(
+    `${BASE_URL}lista_objeto`,
+    { ordenes, id_evento },
+    {
+      headers: { "content-type": "application/json", TOKEN: token },
+    }
+  );
   console.log(res);
   return res;
 };
@@ -247,6 +269,7 @@ const apiService = {
   getMonedaNur,
   getMonedaId,
   getArtistas,
+  getCatalogoOrganizadores,
   crearArtista,
   crearMoneda,
   crearPintura,
@@ -254,6 +277,7 @@ const apiService = {
   agregarArtistaPintura,
   agregarContacto,
   agregarArtistaMoneda,
+  agregarSubastasAEvento,
   inscribirEnEvento,
 };
 

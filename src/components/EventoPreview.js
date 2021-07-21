@@ -77,6 +77,10 @@ const EventoPreview = (props) => {
           <Link to={`/evento/${id}`} className="btn btn-secondary my-1">
             VER EVENTO
           </Link>
+
+          <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
+            Agregar Subastas
+          </Link>
         </div>
       </div>
     </Card>

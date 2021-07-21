@@ -17,7 +17,6 @@ const Home = () => {
         <Link to="/" className="btn btn-primary col mx-2"></Link>
         <Link to="/" className="btn btn-primary col mx-2"></Link>
         <Link to="/" className="btn btn-primary col mx-2"></Link>
-        <Link to="/" className="btn btn-primary col mx-2"></Link>
       </div>
     </div>
   );
