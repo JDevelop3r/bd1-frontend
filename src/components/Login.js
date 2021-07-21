@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 import apiService from "../services/api-service";
 import Card from "./Card";
 
 const Login = () => {
   const history = useHistory();
+  const alert = useAlert();
 
   const [type, setType] = useState("organizacion");
   const [cuenta, setCuenta] = useState();
@@ -39,6 +41,7 @@ const Login = () => {
     e.preventDefault();
     if (!cuenta) return;
     const res = await apiService.login({ id: cuenta, tipo: type });
+    alert.show("Sesión iniciada");
     if (res.status === 200 || res.status === 201) {
       history.push("/");
     }

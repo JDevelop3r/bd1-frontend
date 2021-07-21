@@ -1,37 +1,41 @@
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const BASE_URL = "http://localhost:8000/";
 
-/* const getData = async () => {
-  const res = await axios.get(`${BASE_URL}products/products`);
-  return res.data;
-};
-
-const getOneData = async (id) => {
-  const res = await axios.get(`${BASE_URL}products/${id}/`);
-  console.log(res.data);
-  return res.data;
-};
-
-const updateData = async (id, form_data) => {
-  return await axios.patch(`${BASE_URL}products/${id}/`, form_data, {
-    headers: { "content-type": "multipart/form-data" },
-  });
-};
-
-const deleteItem = async (itemId) => {
-  return await axios.delete(`${BASE_URL}products/${itemId}/`);
-};
-
-const createItem = async (form_data) => {
-  const res = await axios.post(`${BASE_URL}products/`, form_data, {
-    headers: { "content-type": "multipart/form-data" },
-  });
-  console.log(res);
-}; */
-
 const login = async (user) => {
   const res = await axios.post(`${BASE_URL}login/`, user, {
+    headers: { "content-type": "application/json" },
+  });
+  if (res.status === 200 || res.status === 201) {
+    localStorage.setItem("token", res.data["TOKEN"]);
+    localStorage.setItem("tipo", res.data["tipo"]);
+  }
+  console.log(res);
+  return res;
+};
+
+const Logout = () => {
+  localStorage.removeItem("token");
+};
+
+const getToken = () => {
+  return localStorage.getItem("token");
+};
+
+const registerColeccionista = async (user) => {
+  const res = await axios.post(`${BASE_URL}coleccionista`, user, {
+    headers: { "content-type": "application/json" },
+  });
+  if (res.status === 200 || res.status === 201) {
+    localStorage.setItem("token", res.data["TOKEN"]);
+  }
+  console.log(res);
+  return res;
+};
+
+const registerOrganizacion = async (user) => {
+  const res = await axios.post(`${BASE_URL}organizacion`, user, {
     headers: { "content-type": "application/json" },
   });
   if (res.status === 200 || res.status === 201) {
@@ -65,8 +69,33 @@ const getColeccionistas = async () => {
   return res.data;
 };
 
+const inscribirEnEvento = async (idEvento) => {
+  const token = localStorage.getItem("token");
+  const res = await axios.post(
+    `${BASE_URL}participante/inscripcion/${idEvento}`,
+    {},
+    {
+      headers: { "content-type": "multipart/form-data", TOKEN: token },
+    }
+  );
+  console.log(res);
+  return res;
+};
+
 const getEventos = async () => {
-  const res = await axios.get(`${BASE_URL}evento/`);
+  const token = localStorage.getItem("token");
+  const res = await axios.get(`${BASE_URL}evento/`, {
+    headers: { TOKEN: token },
+  });
+  console.log(res.data);
+  return res.data;
+};
+
+const getEventosOrganizacion = async (organizacionId) => {
+  const token = localStorage.getItem("token");
+  const res = await axios.get(`${BASE_URL}evento/eventos/${organizacionId}`, {
+    headers: { TOKEN: token },
+  });
   console.log(res.data);
   return res.data;
 };
@@ -167,6 +196,17 @@ const agregarArtistaMoneda = async (form_data) => {
   return res;
 };
 
+const agregarContacto = async (form_data, mandarToken) => {
+  const token = localStorage.getItem("token");
+  const headers = { "content-type": "application/json" };
+  if (mandarToken) headers.TOKEN = token;
+  const res = await axios.post(`${BASE_URL}contacto`, form_data, {
+    headers,
+  });
+  console.log(res);
+  return res;
+};
+
 const agregarArtistaPintura = async (form_data) => {
   const token = localStorage.getItem("token");
   const res = await axios.post(`${BASE_URL}pintura_artista`, form_data, {
@@ -187,6 +227,11 @@ const crearEvento = async (form_data) => {
 
 const apiService = {
   login,
+  Logout,
+  getToken,
+  registerOrganizacion,
+  registerColeccionista,
+  getEventosOrganizacion,
   getOrganizacion,
   getOrganizaciones,
   getPaises,
@@ -207,12 +252,9 @@ const apiService = {
   crearPintura,
   crearEvento,
   agregarArtistaPintura,
+  agregarContacto,
   agregarArtistaMoneda,
-  /* deleteItem,
-  getData,
-  createItem,
-  getOneData,
-  updateData, */
+  inscribirEnEvento,
 };
 
 export default apiService;

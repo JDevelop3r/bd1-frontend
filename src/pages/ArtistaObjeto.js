@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
+
 import Card from "../components/Card";
 import apiService from "../services/api-service";
 
 const ArtistaObjeto = () => {
+  const alert = useAlert();
+  const history = useHistory();
+
   let objId;
   let artistaId;
   const [type, setType] = useState("pintura");
@@ -24,19 +30,29 @@ const ArtistaObjeto = () => {
   useEffect(() => loadData(), []);
 
   const onClickAgregar = async () => {
+    console.log(objId, artistaId);
     if (!objId || !artistaId) return;
-    console.log(objId);
     let res;
-    if (type === "moneda") {
-      res = await apiService.agregarArtistaMoneda({
-        id_artista: artistaId,
-        id_moneda: objId,
-      });
+    try {
+      if (type === "moneda") {
+        res = await apiService.agregarArtistaMoneda({
+          id_artista: artistaId,
+          id_moneda: objId,
+        });
+      } else if (type === "pintura") {
+        res = await apiService.agregarArtistaPintura({
+          id_artista: artistaId,
+          id_pintura: objId,
+        });
+      }
+      if (res.status === 200 || res.status === 201) {
+        alert.show("Artista añadido");
+        history.push("/");
+      }
+    } catch (error) {
+      alert.show("Error al agregar artista", { type: "error" });
     }
-    res = await apiService.agregarArtistaPintura({
-      id_artista: artistaId,
-      id_moneda: objId,
-    });
+
     console.log(res);
   };
 
@@ -55,7 +71,7 @@ const ArtistaObjeto = () => {
   };
 
   const onChangeArtista = (e) => {
-    objId = e.target.value;
+    artistaId = e.target.value;
   };
 
   return (
@@ -78,12 +94,12 @@ const ArtistaObjeto = () => {
               <option value="">Selecciona una {type}</option>
               {type === "moneda"
                 ? monedas.map((moneda) => (
-                    <option key={moneda.id} value={moneda.id}>
-                      {moneda.nombre}
+                    <option key={moneda.moneda.id} value={moneda.moneda.id}>
+                      {moneda.moneda.nombre}
                     </option>
                   ))
                 : pinturas.map((pintura) => (
-                    <option key={pintura.id} value={pintura.id}>
+                    <option key={pintura.nur} value={pintura.nur}>
                       {pintura.titulo}
                     </option>
                   ))}

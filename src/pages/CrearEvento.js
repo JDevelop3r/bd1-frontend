@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useAlert } from "react-alert";
+import { useHistory } from "react-router-dom";
+
 import Card from "../components/Card";
 import apiService from "../services/api-service";
 
 const CrearEvento = () => {
+  const alert = useAlert();
+  const history = useHistory();
+
   const [paises, setPaises] = useState([]);
   const [evento, setEvento] = useState({});
   const [organizaciones, setOrganizaciones] = useState({});
@@ -18,7 +24,7 @@ const CrearEvento = () => {
 
   useEffect(() => loadData(), []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     evento.planificadores = planificadores.filter(
       (el) => typeof el === "number"
@@ -27,10 +33,15 @@ const CrearEvento = () => {
       .toLocaleDateString()
       .replaceAll("/", "-");
     const { fechaString, ...eventoClean } = evento;
-    console.log(eventoClean);
 
-    apiService.crearEvento(eventoClean);
-    console.log(evento);
+    try {
+      const res = await apiService.crearEvento(eventoClean);
+      alert.show("Evento creado");
+      if (res.status === 200 || res.status === 201) history.push("/");
+    } catch (error) {
+      console.log(error);
+      alert.show("Error al crear evento", { type: "error" });
+    }
   };
 
   const onClickAgregar = () => {

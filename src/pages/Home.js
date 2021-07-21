@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import apiService from "../services/api-service";
 
 import "./styles/Home.css";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-
-  const fetchData = () => {
-    apiService.getData().then((data) => {
-      console.log(data);
-      setProducts(data);
-    });
-  };
-
-  // useEffect(fetchData, []);
-
-  return <div className="Home"></div>;
+  return (
+    <div className="Home">
+      <div className="container row">
+        <Link to="/agregar-artista" className="btn btn-primary col mx-2">
+          Agregar artista
+        </Link>
+        <Link to="/crear-evento" className="btn btn-primary col mx-2">
+          Crear Evento
+        </Link>
+        <Link to="/" className="btn btn-primary col mx-2"></Link>
+        <Link to="/" className="btn btn-primary col mx-2"></Link>
+        <Link to="/" className="btn btn-primary col mx-2"></Link>
+        <Link to="/" className="btn btn-primary col mx-2"></Link>
+        <Link to="/" className="btn btn-primary col mx-2"></Link>
+      </div>
+    </div>
+  );
 };
 
 export default Home;

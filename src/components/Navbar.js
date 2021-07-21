@@ -1,11 +1,20 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import logo from "../images/OsuDiGon_circles.png";
+import apiService from "../services/api-service";
 import "./styles/Navbar.css";
 
 const Navbar = () => {
   const location = useLocation();
+  const history = useHistory();
+  const [token, setToken] = useState(apiService.getToken());
+
+  const logout = () => {
+    apiService.Logout();
+    history.push("/");
+    setToken(apiService.getToken());
+  };
 
   return (
     <div className="Navbar">
@@ -41,16 +50,22 @@ const Navbar = () => {
         >
           <span>Eventos</span>
         </Link>
-        <Link
-          className={
-            location.pathname.includes("login")
-              ? "Navbar__brand active"
-              : "Navbar__brand"
-          }
-          to="/login"
-        >
-          <span>Iniciar Sesión</span>
-        </Link>
+        {token ? (
+          <Link className="Navbar__brand" onClick={logout}>
+            <span>Cerrar Sesión</span>
+          </Link>
+        ) : (
+          <Link
+            className={
+              location.pathname.includes("login")
+                ? "Navbar__brand active"
+                : "Navbar__brand"
+            }
+            to="/login"
+          >
+            <span>Iniciar Sesión</span>
+          </Link>
+        )}
       </div>
     </div>
   );

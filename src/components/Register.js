@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
+
 import apiService from "../services/api-service";
 import Card from "./Card";
+import FormContacto from "./FormContacto";
 
 const Register = () => {
+  const alert = useAlert();
+
+  const history = useHistory();
+
   const [type, setType] = useState(false);
   const [empresa, setEmpresa] = useState({});
   const [coleccionista, setColeccionista] = useState({});
   const [paises, setPaises] = useState([]);
+
+  const [mostrarFormularioDeContacto, setMostrar] = useState(false);
 
   const loadData = async () => {
     const res = await apiService.getPaises();
@@ -21,12 +31,46 @@ const Register = () => {
     setEmpresa({});
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    if (type) {
-      console.log(coleccionista);
-    } else {
-      console.log(empresa);
+    try {
+      if (type) {
+        console.log(coleccionista);
+        const { fechaString, ...coleccionistaClean } = coleccionista;
+        await apiService.registerColeccionista(coleccionistaClean);
+        history.push("/");
+      } else {
+        console.log(empresa);
+        const res = await apiService.registerOrganizacion(empresa);
+        setEmpresa(res.data);
+        alert.show("Debes agregar un contacto", { type: "info" });
+        setMostrar(true);
+      }
+      alert.show("Registro exitoso");
+    } catch (error) {
+      alert.show("Error al registrar. Verifica los datos", { type: "error" });
+    }
+  };
+
+  const onSubmitContacto = async (form) => {
+    if (!empresa.id) {
+      alert.show("Error al crear contacto", { type: "error" });
+      return;
+    }
+    try {
+      console.log(form);
+      const res = await apiService.agregarContacto(
+        {
+          id_organizacion: empresa.id,
+          ...form,
+        },
+        false
+      );
+      if (res.status === 200 || res.status === 201)
+        alert.show("Contacto agregado");
+      history.push("/");
+    } catch (error) {
+      alert.show("Verifica los datos.", { type: "error" });
     }
   };
 
@@ -61,7 +105,7 @@ const Register = () => {
     setColeccionista({ ...coleccionista, segundoNombre: e.target.value });
 
   const onChangePrimerApellido = (e) =>
-    setColeccionista({ ...coleccionista, primerApellido: e.target.value });
+    setColeccionista({ ...coleccionista, apellido: e.target.value });
 
   const onChangeSegundoApellido = (e) =>
     setColeccionista({ ...coleccionista, segundoApellido: e.target.value });
@@ -70,16 +114,24 @@ const Register = () => {
     setColeccionista({ ...coleccionista, dni: e.target.value });
 
   const onChangeFechaNacimiento = (e) =>
-    setColeccionista({ ...coleccionista, fechaNacimiento: e.target.value });
+    setColeccionista({
+      ...coleccionista,
+      fechaNacimiento: new Date(e.target.value)
+        .toLocaleDateString()
+        .replaceAll("/", "-"),
+      fechaString: e.target.value,
+    });
 
-  const onChangeCodeTlf = (e) =>
-    setColeccionista({ ...coleccionista, codeTlf: e.target.value });
-
-  const onChangeTelefono = (e) =>
-    setColeccionista({ ...coleccionista, telefono: e.target.value });
+  const onChangeTelefono = (e) => {
+    if (type) setColeccionista({ ...coleccionista, telefono: e.target.value });
+    else setEmpresa({ ...empresa, telefonoPrincipal: e.target.value });
+  };
 
   const onChangeResidencia = (e) =>
-    setColeccionista({ ...coleccionista, residencia: e.target.value });
+    setColeccionista({ ...coleccionista, id_pais_reside: e.target.value });
+
+  const onChangePaisNacimiento = (e) =>
+    setColeccionista({ ...coleccionista, id_pais_nacio: e.target.value });
 
   const renderEmpresaFormInputs = () => {
     return (
@@ -130,7 +182,7 @@ const Register = () => {
           maxLength="20"
           pattern="[0-9\s]{2,3}[0-9]{3,}-[0-9]{3,}-[0-9]{4,}"
           placeholder="Teléfono: (58 426-111-2233)"
-          value={empresa.telefono}
+          value={empresa.telefonoPrincipal}
           onChange={onChangeTelefono}
           required
         />
@@ -197,7 +249,7 @@ const Register = () => {
             className="Authenticate__container-input form-control"
             type="text"
             placeholder="Primer Apellido"
-            value={coleccionista.primerApellido}
+            value={coleccionista.apellido}
             onChange={onChangePrimerApellido}
             required
           />
@@ -223,85 +275,99 @@ const Register = () => {
             className="form-control"
             type="date"
             placeholder="Fecha de Nacimiento"
-            value={coleccionista.fechaNacimiento}
+            value={coleccionista.fechaString}
             onChange={onChangeFechaNacimiento}
             required
           />
         </div>
         <div className="d-flex justify-content-center">
           <input
-            className="Authenticate__container-input form-control"
-            type="number"
-            max="999"
-            pattern="[0-9]{3}"
-            placeholder="Cod de área"
-            value={coleccionista.codeTlf}
-            onChange={onChangeCodeTlf}
-            required
-          />
-          <input
             className="form-control"
             type="tel"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            pattern="[0-9\s]{2,3}[0-9]{3,}-[0-9]{3,}-[0-9]{4,}"
             placeholder="Número de teléfono"
             value={coleccionista.telefono}
             onChange={onChangeTelefono}
             required
           />
         </div>
-        <select
-          className="form-control"
-          value={coleccionista.residencia}
-          onChange={onChangeResidencia}
-          required
-        >
-          <option value="">Ciudad de Residencia</option>
-          <option value="caracas">Caracas</option>
-          <option value="valencia">Valencia</option>
-          <option value="maracay">Maracay</option>
-          <option value="Maracaibo">Maracaibo</option>
-        </select>
+        <div className="d-flex justify-content-center">
+          <select
+            className="form-control"
+            value={coleccionista.id_pais_reside}
+            onChange={onChangeResidencia}
+            required
+          >
+            <option value="">País de Residencia</option>
+            {paises.map((pais) => (
+              <option key={pais.id} value={pais.id}>
+                {pais.nombre}
+              </option>
+            ))}
+          </select>
+          <select
+            className="form-control"
+            value={coleccionista.id_pais_nacio}
+            onChange={onChangePaisNacimiento}
+            required
+          >
+            <option value="">País de Nacimiento</option>
+            {paises.map((pais) => (
+              <option key={pais.id} value={pais.id}>
+                {pais.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     );
   };
 
   return (
-    <Card>
-      <h2>Registro {type ? "Coleccionista" : "Empresa"}</h2>
-      <form
-        className="d-flex flex-column align-items-center"
-        onSubmit={handleRegister}
-      >
-        <button
-          type="reset"
-          className="btn btn-light"
-          onClick={handleChangeType}
-        >
-          Registro {type ? "Empresa" : "Coleccionista"}
-        </button>
-        <div className="my-2"></div>
-        <div className="form-group mb-3">
-          <input
-            className="form-control"
-            type="email"
-            maxLength="50"
-            placeholder="Correo electrónico"
-            value={type ? coleccionista.email : empresa.email}
-            onChange={onChangeEmail}
-            required
-          />
-          {type ? renderColeccionistaFormInputs() : renderEmpresaFormInputs()}
-        </div>
-        <button className="btn btn-primary mb-4" click={handleRegister}>
-          Registrarme
-        </button>
-      </form>
-      <span>
-        <b>
-          ¿Ya tienes una cuenta? <a href="/login">Iniciar Sesión</a>
-        </b>
-      </span>
-    </Card>
+    <div>
+      {mostrarFormularioDeContacto ? (
+        <FormContacto onSubmit={onSubmitContacto}></FormContacto>
+      ) : (
+        <Card>
+          <h2>Registro {type ? "Coleccionista" : "Empresa"}</h2>
+          <form
+            className="d-flex flex-column align-items-center"
+            onSubmit={handleRegister}
+          >
+            <button
+              type="reset"
+              className="btn btn-light"
+              onClick={handleChangeType}
+            >
+              Registro {type ? "Empresa" : "Coleccionista"}
+            </button>
+            <div className="my-2"></div>
+            <div className="form-group mb-3">
+              <input
+                className="form-control"
+                type="email"
+                maxLength="50"
+                placeholder="Correo electrónico"
+                value={type ? coleccionista.email : empresa.email}
+                onChange={onChangeEmail}
+                required
+              />
+              {type
+                ? renderColeccionistaFormInputs()
+                : renderEmpresaFormInputs()}
+            </div>
+            <button className="btn btn-primary mb-4" click={handleRegister}>
+              Registrarme
+            </button>
+          </form>
+          <span>
+            <b>
+              ¿Ya tienes una cuenta? <a href="/login">Iniciar Sesión</a>
+            </b>
+          </span>
+        </Card>
+      )}
+    </div>
   );
 };
 

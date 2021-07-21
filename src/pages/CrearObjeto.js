@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 import Card from "../components/Card";
 import FormCrearMoneda from "../components/FormCrearMoneda";
@@ -11,6 +12,7 @@ const CrearObjeto = () => {
   const { type, id } = useParams();
   const [img, setImg] = useState({});
 
+  const alert = useAlert();
   const history = useHistory();
 
   useEffect(() => {
@@ -33,11 +35,18 @@ const CrearObjeto = () => {
     if (img.file) {
       form_data.append("imagen", img.file);
     }
-    const res =
-      type === "moneda"
-        ? await apiService.crearMoneda(form_data)
-        : await apiService.crearPintura(form_data);
-    if (res.status === 200 || res.status === 201) history.push("/");
+
+    try {
+      const res =
+        type === "moneda"
+          ? await apiService.crearMoneda(form_data)
+          : await apiService.crearPintura(form_data);
+      if (res.status === 200 || res.status === 201) history.push("/");
+      alert.show("Objeto creado");
+    } catch (error) {
+      console.log(error);
+      alert.show("Error al crear objeto", { type: "error" });
+    }
   };
 
   const onChangeImg = (e) => {
