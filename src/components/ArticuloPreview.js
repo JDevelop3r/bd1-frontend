@@ -1,69 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "./Card";
 import "./styles/Articulo.css";
 
 const ArticuloPreview = (props) => {
-  const {
-    id,
-    imgURL,
-    nombre,
-    year,
-    artista,
-    divisa,
-    lugar,
-    periodo,
-    dimensiones,
-    bid,
-    ask,
-  } = props.articulo;
+  const [articulo, setArticulo] = useState({});
+  const { id, duracionmin, ask, bid } = props.articulo;
 
-  const onClickVer = () => {
-    console.log(id);
-  };
+  useEffect(() => {
+    const { moneda, pintura, objeto } = props.articulo;
+    if (!moneda && !pintura) return;
+    let imagen, nombre, ano, id;
+    if (moneda) {
+      imagen = moneda.moneda.imagen;
+      nombre = moneda.moneda.nombre;
+      ano = moneda.moneda.ano;
+      id = moneda.moneda.nur;
+    } else {
+      imagen = pintura.imagen;
+      nombre = pintura.titulo;
+      ano = pintura.ano;
+      id = pintura.nur;
+    }
+    setArticulo({ imagen, nombre, ano, objeto, id });
+  }, [props.articulo]);
 
   return (
     <Card>
       <div className="col justify-content-center">
-        <img className="img-fluid imgMaxSize" src={imgURL} alt={nombre} />
-        <h4 className="text-align-center">{nombre}</h4>
+        <img
+          className="img-fluid imgMaxSize"
+          src={`http://localhost:8000/` + articulo.imagen}
+          alt={articulo.nombre}
+        />
+        <h4 className="text-align-center">{articulo.nombre}</h4>
         <div className="preview-content">
           <p>
-            <b>Año:</b> {year}
+            <b>Año:</b> {articulo.ano}
           </p>
-          <p>
-            <b>Artista:</b> {artista}
-          </p>
-          {divisa ? (
+          {articulo.objeto ? (
             <p>
-              <b>Divisa:</b> {divisa}
+              <b>Objeto:</b> {articulo.objeto}
             </p>
           ) : (
             ""
           )}
-          {lugar ? (
+          {duracionmin ? (
             <p>
-              <b>Divisa:</b> {lugar}
+              <b>Duración:</b> {duracionmin}min
             </p>
           ) : (
             ""
           )}
-          {periodo ? (
+          {props.precio ? (
             <p>
-              <b>Divisa:</b> {periodo}
+              <b>Precio:</b> {props.precio}
             </p>
           ) : (
             ""
           )}
-          {dimensiones ? (
-            <p>
-              <b>Divisa:</b> {dimensiones}
-            </p>
-          ) : (
-            ""
-          )}
-          {bid ? (
+          {(props.planificador &&
+            (props.tipoPuja !== "Ascendente" ||
+              props.tipoPuja !== "ascendente")) ||
+          props.tipoPuja === "Ascendente" ? (
             <p>
               <b>Bid:</b> ${bid}
             </p>
@@ -78,9 +78,19 @@ const ArticuloPreview = (props) => {
             ""
           )}
         </div>
-        <Link to={`/objeto/${id}`} className="btn btn-primary">
+        <Link
+          to={`objeto/${articulo.objeto}/${articulo.id}`}
+          className="btn btn-primary"
+        >
           VER
         </Link>
+        {props.verSubasta ? (
+          <Link to={`/subasta/${id}`} className="btn btn-secondary ml-2">
+            Subasta
+          </Link>
+        ) : (
+          ""
+        )}
       </div>
     </Card>
   );

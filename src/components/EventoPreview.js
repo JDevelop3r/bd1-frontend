@@ -38,6 +38,10 @@ const EventoPreview = (props) => {
     console.log(id);
   };
 
+  const onComenzarSubsata = async () => {
+    await apiService.comenzarSubasta(id);
+  };
+
   return (
     <Card>
       <div className="row align-items-center">
@@ -108,15 +112,19 @@ const EventoPreview = (props) => {
           <Link to={`/evento/${id}`} className="btn btn-secondary my-1">
             VER EVENTO
           </Link>
-          {planificador ? (
+          {planificador && status === "Pendiente" ? (
             <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
               Agregar Subastas
             </Link>
           ) : (
             ""
           )}
-          {planificador && esHoy ? (
-            <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
+          {planificador && esHoy && status === "Pendiente" ? (
+            <Link
+              to={`/evento/${id}`}
+              onClick={onComenzarSubsata}
+              className="btn btn-warning my-1"
+            >
               Comenzar subasta
             </Link>
           ) : (

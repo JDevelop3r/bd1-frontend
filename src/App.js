@@ -19,7 +19,7 @@ import FichaColeccionista from "./pages/FichaColeccionista";
 import FichaOrganizacion from "./pages/FichaOrganizacion";
 import FichaObjeto from "./pages/FichaObjeto";
 import CrearObjeto from "./pages/CrearObjeto";
-import Subasta from "./pages/subasta";
+import Subasta from "./pages/Subasta";
 import NuevoArtista from "./pages/NuevoArtista";
 import CrearEvento from "./pages/CrearEvento";
 import Page404 from "./pages/404Page";
@@ -69,7 +69,7 @@ function App() {
             <Route exact path="/objeto/:type/:id" component={FichaObjeto} />
             <Route exact path="/crear/:type" component={CrearObjeto} />
             <Route exact path="/editar/:type/:id" component={CrearObjeto} />
-            <Route exact path="/subasta" component={Subasta} />
+            <Route exact path="/subasta/:id" component={Subasta} />
             <Route exact path="/artista" component={NuevoArtista} />
             <Route exact path="/crear-evento" component={CrearEvento} />
             <Route exact path="/404" component={Page404} />

@@ -29,9 +29,11 @@ const CrearEvento = () => {
     evento.planificadores = planificadores.filter(
       (el) => typeof el === "number"
     );
-    evento.fecha = new Date(evento.fechaString)
+    evento.fecha = new Date(evento.fechaString.replaceAll("-", "/"))
       .toLocaleDateString()
       .replaceAll("/", "-");
+    console.log(evento.fecha);
+    console.log(evento.fechaString);
     const { fechaString, ...eventoClean } = evento;
 
     try {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 
 import FormSubasta from "../components/FormSubasta";
@@ -8,6 +8,7 @@ import apiService from "../services/api-service";
 const AgregarSubastasAEvento = () => {
   const { idEvento } = useParams();
   const alert = useAlert();
+  const history = useHistory();
 
   const [evento, setEvento] = useState({});
   const [catalogoMonedas, setCatalogoMonedas] = useState([]);
@@ -16,7 +17,7 @@ const AgregarSubastasAEvento = () => {
 
   const loadData = async () => {
     const resListaObjeto = await apiService.getListaObjeto(idEvento);
-    if (resListaObjeto) setSubastas(resListaObjeto);
+    if (resListaObjeto.length) setSubastas(resListaObjeto);
 
     const resEvento = await apiService.getEvento(idEvento);
     setEvento(resEvento);
@@ -73,6 +74,7 @@ const AgregarSubastasAEvento = () => {
       return;
     }
     const res = await apiService.agregarSubastasAEvento(subastas, idEvento);
+    if (res.status === 200 || res.status === 201) history.push("/eventos");
     console.log(res);
   };
 

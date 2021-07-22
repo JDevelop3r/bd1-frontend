@@ -19,7 +19,7 @@ const Logout = () => {
 };
 
 const getToken = () => {
-  return localStorage.getItem("token") ?? null;
+  return localStorage.getItem("token") ?? false;
 };
 
 const registerColeccionista = async (user) => {
@@ -83,6 +83,7 @@ const inscribirEnEvento = async (idEvento) => {
 
 const getEventos = async () => {
   const token = getToken();
+  console.log(token);
   const res = await axios.get(`${BASE_URL}evento/`, {
     headers: { TOKEN: token },
   });
@@ -100,7 +101,11 @@ const getEventosOrganizacion = async (organizacionId) => {
 };
 
 const getEvento = async (id) => {
-  const res = await axios.get(`${BASE_URL}evento/${id}`);
+  const token = getToken();
+  await actualizar();
+  const res = await axios.get(`${BASE_URL}evento/${id}`, {
+    headers: { TOKEN: token },
+  });
   console.log(res.data);
   return res.data;
 };
@@ -183,13 +188,16 @@ const crearPintura = async (form_data) => {
 
 const getArtistas = async () => {
   const res = await axios.get(`${BASE_URL}artista/`);
-  console.log(res.data);
   return res.data;
 };
 
 const getListaObjeto = async (idEvento) => {
   const res = await axios.get(`${BASE_URL}lista_objeto/evento/${idEvento}`);
-  console.log(res.data);
+  return res.data;
+};
+
+const getListaObjetoSubasta = async (idSubasta) => {
+  const res = await axios.get(`${BASE_URL}lista_objeto/get/${idSubasta}`);
   return res.data;
 };
 
@@ -198,7 +206,6 @@ const crearArtista = async (form_data) => {
   const res = await axios.post(`${BASE_URL}artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
-  console.log(res);
   return res;
 };
 
@@ -207,7 +214,6 @@ const agregarArtistaMoneda = async (form_data) => {
   const res = await axios.post(`${BASE_URL}moneda_artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
-  console.log(res);
   return res;
 };
 
@@ -218,7 +224,6 @@ const agregarContacto = async (form_data, mandarToken) => {
   const res = await axios.post(`${BASE_URL}contacto`, form_data, {
     headers,
   });
-  console.log(res);
   return res;
 };
 
@@ -227,7 +232,6 @@ const agregarArtistaPintura = async (form_data) => {
   const res = await axios.post(`${BASE_URL}pintura_artista`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
-  console.log(res);
   return res;
 };
 
@@ -236,8 +240,29 @@ const crearEvento = async (form_data) => {
   const res = await axios.post(`${BASE_URL}evento`, form_data, {
     headers: { "content-type": "application/json", TOKEN: token },
   });
-  console.log(res);
   return res;
+};
+
+const getEventoBySubastaId = async (id) => {
+  const res = await axios.get(`${BASE_URL}evento/getbysubasta/${id}`);
+  console.log(res);
+  return res.data.evento;
+};
+
+const getPujaDinamica = async (id) => {
+  const token = getToken();
+  const res = await axios.get(`${BASE_URL}evento/getpujadinamica/${id}`, {
+    headers: { TOKEN: token },
+  });
+  return res.data;
+};
+
+const getPujaSobreCerrado = async (id) => {
+  const token = getToken();
+  const res = await axios.get(`${BASE_URL}evento/getpujasobrecerrado/${id}`, {
+    headers: { TOKEN: token },
+  });
+  return res.data;
 };
 
 const agregarSubastasAEvento = async (ordenes, id_evento) => {
@@ -250,6 +275,45 @@ const agregarSubastasAEvento = async (ordenes, id_evento) => {
     }
   );
   console.log(res);
+  return res;
+};
+
+const comenzarSubasta = async (id) => {
+  console.log(id);
+  const res = await axios.post(`${BASE_URL}evento/comenzar/${id}`);
+  console.log(res);
+  return res;
+};
+
+const enviarOfertaDinamica = async (precio, id) => {
+  const token = getToken();
+  console.log(id);
+  const res = await axios.post(
+    `${BASE_URL}evento/pujadinamica/${id}`,
+    { precio },
+    {
+      headers: { TOKEN: token },
+    }
+  );
+  console.log(res);
+  return res;
+};
+
+const actualizar = async () => {
+  const res = await axios.post(`${BASE_URL}evento/actualizar/`);
+  return res;
+};
+
+const enviarOfertaSobreCerrado = async (precio, id) => {
+  const token = getToken();
+  console.log(id);
+  const res = await axios.post(
+    `${BASE_URL}evento/pujasobrecerrado/${id}`,
+    { precio },
+    {
+      headers: { TOKEN: token },
+    }
+  );
   return res;
 };
 
@@ -277,6 +341,10 @@ const apiService = {
   getArtistas,
   getCatalogoOrganizadores,
   getListaObjeto,
+  getEventoBySubastaId,
+  getPujaSobreCerrado,
+  getPujaDinamica,
+  getListaObjetoSubasta,
   crearArtista,
   crearMoneda,
   crearPintura,
@@ -286,6 +354,10 @@ const apiService = {
   agregarArtistaMoneda,
   agregarSubastasAEvento,
   inscribirEnEvento,
+  comenzarSubasta,
+  enviarOfertaDinamica,
+  enviarOfertaSobreCerrado,
+  actualizar,
 };
 
 export default apiService;

@@ -12,7 +12,6 @@ const Navbar = () => {
 
   const logout = () => {
     apiService.Logout();
-    history.push("/login");
     setToken(apiService.getToken());
   };
 
@@ -55,7 +54,7 @@ const Navbar = () => {
           <span>Eventos</span>
         </Link>
         {token ? (
-          <Link className="Navbar__brand" onClick={logout}>
+          <Link to="/login" className="Navbar__brand" onClick={logout}>
             <span>Cerrar Sesión</span>
           </Link>
         ) : (

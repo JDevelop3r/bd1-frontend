@@ -8,58 +8,35 @@ const DetalleEvento = () => {
   const { id } = useParams();
   const history = useHistory();
   const [evento, setEvento] = useState({});
+  const [articulos, setArticulos] = useState([]);
+  const [inscrito, setInscrito] = useState(false);
 
   const loadData = async () => {
     try {
       const resEvento = await apiService.getEvento(id);
       setEvento(resEvento);
+      setInscrito(resEvento.inscrito ?? false);
     } catch (error) {
       history.push("/404");
     }
+    const listaObjeto = await apiService.getListaObjeto(id);
+    setArticulos(listaObjeto);
   };
 
   useEffect(() => loadData(), []);
 
-  const articulos = [
-    {
-      nombre: "Moneda",
-      imgURL:
-        "https://www.elindependiente.com/wp-content/uploads/2021/01/Es_au_LXIAcQmFg-e1612029749136-1080x808.jpg",
-      year: "1873",
-      artista: "Artista",
-      divisa: "Dólar",
-      lugar: "EEUU",
-    },
-    {
-      nombre: "Moneda",
-      imgURL:
-        "https://www.elindependiente.com/wp-content/uploads/2021/01/Es_au_LXIAcQmFg-e1612029749136-1080x808.jpg",
-      year: "1873",
-      artista: "Artista",
-      divisa: "Dólar",
-      lugar: "EEUU",
-    },
-    {
-      nombre: "Moneda",
-      imgURL:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/220px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-      year: "1873",
-      artista: "Artista",
-      periodo: "Renacimiento",
-      dimensiones: "180x180",
-    },
-    {
-      nombre: "Moneda",
-      imgURL:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/220px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-      year: "1873",
-      artista: "Artista",
-      periodo: "Renacimiento",
-      dimensiones: "180x180",
-    },
-  ];
-
-  const onClickInscribirme = () => {
+  const onClickInscribirme = async () => {
+    if (inscrito === false) {
+      try {
+        const res = await apiService.inscribirEnEvento(id);
+        if (res.status === 200 || res.status === 201) {
+          alert.show("Te has inscrito en este evento");
+          setInscrito(true);
+        }
+      } catch (error) {
+        alert.show("Error al inscribirse en este evento");
+      }
+    }
     console.log(id);
   };
 
@@ -135,7 +112,7 @@ const DetalleEvento = () => {
             <span className="badge bg-warning rounded-pill text-dark">
               {evento.status}
             </span>
-            {evento.status === "Pendiente" ? (
+            {evento.status === "Pendiente" && evento.inscrito ? (
               <button
                 onClick={onClickInscribirme}
                 className="btn btn-primary my-1"
@@ -149,10 +126,15 @@ const DetalleEvento = () => {
         </div>
       </Card>
 
-      <h2>Artículos</h2>
+      <h2>Lista de objetos</h2>
       <div className="d-flex flex-wrap">
         {articulos.map((articulo) => (
-          <ArticuloPreview articulo={articulo} />
+          <ArticuloPreview
+            verSubasta={evento.status === "Progreso"}
+            tipoPuja={evento.tipoPuja}
+            planificador={evento.planificador}
+            articulo={articulo}
+          />
         ))}
       </div>
     </main>
