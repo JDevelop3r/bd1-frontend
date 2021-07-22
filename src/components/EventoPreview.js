@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAlert } from "react-alert";
 
+import apiService from "../services/api-service";
 import Card from "./Card";
 
 const EventoPreview = (props) => {
+  const alert = useAlert();
+  const [inscrito, setInscrito] = useState(props.evento.inscrito);
   const {
     id,
     inscripcionCliente,
@@ -14,10 +18,23 @@ const EventoPreview = (props) => {
     duracionHoras,
     lugar,
     pais,
+    esHoy,
+    planificador,
     planificadores,
   } = props.evento;
 
-  const onClickInscribirme = () => {
+  const onClickInscribirme = async () => {
+    if (inscrito === false) {
+      try {
+        const res = await apiService.inscribirEnEvento(id);
+        if (res.status === 200 || res.status === 201) {
+          alert.show("Te has inscrito en este evento");
+          setInscrito(true);
+        }
+      } catch (error) {
+        alert.show("Error al inscribirse en este evento");
+      }
+    }
     console.log(id);
   };
 
@@ -71,16 +88,40 @@ const EventoPreview = (props) => {
           <span className="badge bg-warning rounded-pill text-dark">
             {status}
           </span>
-          <button onClick={onClickInscribirme} className="btn btn-primary my-1">
-            INSCRIBIRME
-          </button>
+          {inscrito === false ? (
+            <button
+              onClick={onClickInscribirme}
+              className="btn btn-primary my-1"
+            >
+              INSCRIBIRME
+            </button>
+          ) : (
+            ""
+          )}
+          {inscrito === true ? (
+            <button disabled className="btn btn-primary my-1">
+              INSCRITO
+            </button>
+          ) : (
+            ""
+          )}
           <Link to={`/evento/${id}`} className="btn btn-secondary my-1">
             VER EVENTO
           </Link>
-
-          <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
-            Agregar Subastas
-          </Link>
+          {planificador ? (
+            <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
+              Agregar Subastas
+            </Link>
+          ) : (
+            ""
+          )}
+          {planificador && esHoy ? (
+            <Link to={`/agregar-subastas/${id}`} className="btn btn-info my-1">
+              Comenzar subasta
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </Card>
