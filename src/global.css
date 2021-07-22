@@ -1,3 +1,20 @@
+:root {
+  --bs-primary: #a6a6a6;
+  --bs-secondary: #e2f2da;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #a6a6a6;
+  border-color: #a6a6a6;
+}
+
+.btn-secondary {
+  color: #111;
+  background-color: #e2f2da;
+  border-color: #e2f2da;
+}
+
 * {
   font-family: "PT Sans", sans-serif;
 }
