@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import ArticuloPreview from "../components/ArticuloPreview";
 import Card from "../components/Card";
 import apiService from "../services/api-service";
 
@@ -7,6 +8,7 @@ const FichaOrganizacion = () => {
   const { id } = useParams();
   const history = useHistory();
   const [organizacion, setOrganizacion] = useState({});
+  const [catalogo, setCatalogo] = useState([]);
 
   const loadData = async () => {
     try {
@@ -15,6 +17,9 @@ const FichaOrganizacion = () => {
     } catch (error) {
       history.push("/404");
     }
+    const resCatalogo = await apiService.getCatalogoOrganizacion(id);
+    console.log([...resCatalogo.pinturas, ...resCatalogo.monedas]);
+    setCatalogo([...resCatalogo.pinturas, ...resCatalogo.monedas]);
   };
 
   useEffect(() => loadData(), []);
@@ -60,6 +65,11 @@ const FichaOrganizacion = () => {
             </p>
           </div>
         </Card>
+        <div className="d-flex flex-wrap">
+          {catalogo.map((articulo) => (
+            <ArticuloPreview articulo={articulo} />
+          ))}
+        </div>
       </div>
     </main>
   );

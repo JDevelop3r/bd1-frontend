@@ -14,10 +14,14 @@ const Home = () => {
           Crear Evento
         </Link>
         <Link to="/agregar-moneda" className="btn btn-primary col mx-2">
-          Agregar Moneda
+          Agregar Catalogo Moneda
         </Link>
-        <Link to="/" className="btn btn-primary col mx-2"></Link>
-        <Link to="/" className="btn btn-primary col mx-2"></Link>
+        <Link to="/crear/moneda" className="btn btn-primary col mx-2">
+          Crear Moneda
+        </Link>
+        <Link to="/crear/pintura" className="btn btn-primary col mx-2">
+          Crear Pintura
+        </Link>
         <Link to="/" className="btn btn-primary col mx-2"></Link>
       </div>
     </div>

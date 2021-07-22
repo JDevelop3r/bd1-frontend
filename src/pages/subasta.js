@@ -26,13 +26,17 @@ const Subasta = () => {
 
   const recargarPujas = async (res) => {
     await apiService.actualizar();
-    if (res.tipoPuja === "ascendente") {
+    console.log(res);
+    if (res.tipoPuja === "ascendente" || evento.tipoPuja === "ascendente") {
       console.log("ascendente");
       const resSubasta = await apiService.getPujaDinamica(id);
       console.log(resSubasta);
       setSubasta(resSubasta);
       setLogs(resSubasta.logs);
-    } else if (res.tipoPuja === "sobre cerrado") {
+    } else if (
+      res.tipoPuja === "sobre cerrado" ||
+      evento.tipoPuja === "sobre cerrado"
+    ) {
       console.log("cerrado");
       const resSubasta = await apiService.getPujaSobreCerrado(id);
       console.log(resSubasta);
@@ -68,7 +72,11 @@ const Subasta = () => {
             <h2>
               Subasta{" "}
               <span className="badge bg-warning">
-                {subasta.activa ? "Activa" : "Finalizada"}
+                {!subasta.comenzo
+                  ? "Aun no comienza"
+                  : subasta.activa
+                  ? "Activa"
+                  : "Finalizada"}
               </span>
             </h2>
             <p>
@@ -122,7 +130,7 @@ const Subasta = () => {
           ) : (
             ""
           )}
-          {!subasta.planificador ? (
+          {!subasta.planificador && subasta.comenzo ? (
             <div>
               <h3>Ofertar</h3>
               <BotonOfertar

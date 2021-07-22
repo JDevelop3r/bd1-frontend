@@ -92,7 +92,7 @@ const EventoPreview = (props) => {
           <span className="badge bg-warning rounded-pill text-dark">
             {status}
           </span>
-          {inscrito === false ? (
+          {inscrito === false && status === "Pendiente" ? (
             <button
               onClick={onClickInscribirme}
               className="btn btn-primary my-1"
@@ -102,7 +102,7 @@ const EventoPreview = (props) => {
           ) : (
             ""
           )}
-          {inscrito === true ? (
+          {inscrito === true && status === "Pendiente" ? (
             <button disabled className="btn btn-primary my-1">
               INSCRITO
             </button>

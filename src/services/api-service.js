@@ -82,6 +82,7 @@ const inscribirEnEvento = async (idEvento) => {
 };
 
 const getEventos = async () => {
+  await actualizar();
   const token = getToken();
   console.log(token);
   const res = await axios.get(`${BASE_URL}evento/`, {
@@ -133,6 +134,25 @@ const crearMoneda = async (form_data) => {
 
 const getMonedas = async () => {
   const res = await axios.get(`${BASE_URL}catalogo/moneda/`);
+  console.log(res.data);
+  return res.data;
+};
+
+const setCatalogoMonedas = async (id_moneda) => {
+  const token = getToken();
+  const res = await axios.post(
+    `${BASE_URL}catalogo/moneda`,
+    { id_moneda },
+    {
+      headers: { TOKEN: token },
+    }
+  );
+  console.log(res.data);
+  return res.data;
+};
+
+const getSoloMonedas = async () => {
+  const res = await axios.get(`${BASE_URL}moneda/`);
   console.log(res.data);
   return res.data;
 };
@@ -207,6 +227,11 @@ const crearArtista = async (form_data) => {
     headers: { "content-type": "application/json", TOKEN: token },
   });
   return res;
+};
+
+const getCatalogoOrganizacion = async (id) => {
+  const res = await axios.get(`${BASE_URL}catalogo/organizacion/${id}`);
+  return res.data;
 };
 
 const agregarArtistaMoneda = async (form_data) => {
@@ -328,6 +353,18 @@ const enviarOfertaSobreCerrado = async (precio, id) => {
   return res;
 };
 
+const getCatalogoMoneda = async (id) => {
+  console.log(id);
+  const res = await axios.get(`${BASE_URL}catalogo/moneda/obj/${id}`);
+  return res.data;
+};
+
+const getCatalogoPintura = async (id) => {
+  console.log(id);
+  const res = await axios.get(`${BASE_URL}catalogo/pintura/obj/${id}`);
+  return res.data;
+};
+
 const apiService = {
   login,
   Logout,
@@ -351,21 +388,26 @@ const apiService = {
   getMonedaId,
   getArtistas,
   getCostoEnvio,
+  setCatalogoMonedas,
   getCatalogoOrganizadores,
   getListaObjeto,
   getEventoBySubastaId,
   getPujaSobreCerrado,
   getPujaDinamica,
   getListaObjetoSubasta,
+  getCatalogoOrganizacion,
   crearArtista,
   crearMoneda,
   crearPintura,
   crearEvento,
+  getSoloMonedas,
   agregarArtistaPintura,
   agregarContacto,
   agregarArtistaMoneda,
   agregarSubastasAEvento,
   inscribirEnEvento,
+  getCatalogoMoneda,
+  getCatalogoPintura,
   comenzarSubasta,
   enviarOfertaDinamica,
   enviarOfertaSobreCerrado,
