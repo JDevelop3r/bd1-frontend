@@ -6,7 +6,7 @@ import "./styles/Articulo.css";
 
 const ArticuloPreview = (props) => {
   const [articulo, setArticulo] = useState({});
-  const { id, duracionmin, ask, bid } = props.articulo;
+  const { id, duracionmin, ask, bid, precio } = props.articulo;
 
   useEffect(() => {
     const { moneda, pintura, objeto } = props.articulo;
@@ -77,6 +77,13 @@ const ArticuloPreview = (props) => {
           ) : (
             ""
           )}
+          {/* {precio ? ( Cambio de alfredo, revisar
+            <p>
+              <b>precio:</b> ${precio}
+            </p>
+          ) : (
+            ""
+          )} */}
         </div>
         <Link
           to={`objeto/${articulo.objeto}/${articulo.id}`}
