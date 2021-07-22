@@ -21,6 +21,12 @@ const AgregarPrecios = () => {
   useEffect(() => loadData(), []);
   useEffect(() => loadDataE(), []);
 
+  /*handleSubmit = async e => {
+    e.preventDefault()
+
+    console.log(this.state)
+  }*/
+
   return (
     <div className="container">
       <Card>
