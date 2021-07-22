@@ -48,7 +48,7 @@ const AgregarSubastasAEvento = () => {
     const { duracionmin, ...subastaClean } = subasta;
     newSubastas[index] = {
       ...subastaClean,
-      duracionmin: duracionmin,
+      duracionmin: duracionmin ?? 0,
       id_evento: idEvento,
       orden: index,
     };
