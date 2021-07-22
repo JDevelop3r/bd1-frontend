@@ -25,6 +25,8 @@ import CrearEvento from "./pages/CrearEvento";
 import Page404 from "./pages/404Page";
 import ArtistaObjeto from "./pages/ArtistaObjeto";
 import AgregarSubastasAEvento from "./pages/AgregarSubastasAEvento";
+import AgregarPrecios from "./pages/AgregarPrecios";
+import Factura from "./pages/Factura";
 
 function App() {
   const options = {
@@ -74,6 +76,8 @@ function App() {
             <Route exact path="/crear-evento" component={CrearEvento} />
             <Route exact path="/404" component={Page404} />
             <Route exact path="/agregar-artista" component={ArtistaObjeto} />
+            <Route exact path="/Agregar-Precios" component={AgregarPrecios} />
+            <Route exact path="/Factura" component={Factura} />
             <Route
               exact
               path="/agregar-subastas/:idEvento"

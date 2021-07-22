@@ -17,6 +17,7 @@ const ArticuloPreview = (props) => {
     dimensiones,
     bid,
     ask,
+    precio,
   } = props.articulo;
 
   const onClickVer = () => {
@@ -73,6 +74,13 @@ const ArticuloPreview = (props) => {
           {ask ? (
             <p>
               <b>Ask:</b> ${ask}
+            </p>
+          ) : (
+            ""
+          )}
+          {precio ? (
+            <p>
+              <b>precio:</b> ${precio}
             </p>
           ) : (
             ""

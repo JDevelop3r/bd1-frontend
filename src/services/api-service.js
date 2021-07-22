@@ -253,6 +253,15 @@ const agregarSubastasAEvento = async (ordenes, id_evento) => {
   return res;
 };
 
+const getCostoEnvio = async (id_pais, id_evento, costoextra) => {
+  const token = getToken();
+  const res = await axios.post(`${BASE_URL}costoEnvio`, {id_pais, id_evento, costoextra}, {
+    headers: { "content-type": "application/json", TOKEN: token },
+  });
+  console.log(res);
+  return res;
+};
+
 const apiService = {
   login,
   Logout,
@@ -275,6 +284,7 @@ const apiService = {
   getMonedaNur,
   getMonedaId,
   getArtistas,
+  getCostoEnvio,
   getCatalogoOrganizadores,
   getListaObjeto,
   crearArtista,
