@@ -8,14 +8,19 @@ import apiService from "../services/api-service";
 const AgregarSubastasAEvento = () => {
   const { idEvento } = useParams();
   const alert = useAlert();
+
   const [evento, setEvento] = useState({});
   const [catalogoMonedas, setCatalogoMonedas] = useState([]);
   const [catalogoPinturas, setCatalogoPinturas] = useState([]);
   const [subastas, setSubastas] = useState([{}]);
 
   const loadData = async () => {
+    const resListaObjeto = await apiService.getListaObjeto(idEvento);
+    if (resListaObjeto) setSubastas(resListaObjeto);
+
     const resEvento = await apiService.getEvento(idEvento);
     setEvento(resEvento);
+
     const catalogo = await apiService.getCatalogoOrganizadores(
       resEvento.planificadores.map((el) => el.id)
     );
@@ -55,7 +60,15 @@ const AgregarSubastasAEvento = () => {
     console.log(subastas);
     if (faltanCampos()) {
       alert.show(
-        "Termine de registrar la subasta o eliminela antes de guardar."
+        "Termine de registrar la subasta o eliminela antes de guardar.",
+        { type: "info" }
+      );
+      return;
+    }
+    if (objetoRepetido()) {
+      alert.show(
+        "tiene un producto repetido, por favor cambielo o elimine uno.",
+        { type: "info" }
       );
       return;
     }
@@ -73,6 +86,18 @@ const AgregarSubastasAEvento = () => {
     );
   };
 
+  const objetoRepetido = () => {
+    subastas.forEach((subastaP) => {
+      const filtro = subastas.filter((subasta) =>
+        subasta.nur_moneda
+          ? subasta.nur_moneda === subastaP.nur_moneda
+          : subasta.id_pintura === subastaP.id_pintura
+      );
+      if (filtro.length > 1) return true;
+    });
+    return false;
+  };
+
   const onDelete = (index) => {
     if (subastas.length === 0) return;
     const newSubastas = subastas.splice(index, 1);
@@ -81,25 +106,30 @@ const AgregarSubastasAEvento = () => {
 
   return (
     <main className="container">
-      <h2>Agregar subastas a evento {evento.id}</h2>
+      <h2>Agregar lista objetos a evento {evento.id}</h2>
       <form onSubmit={onSave}>
         <div className="col-12">
           <div className="row flex-wrap align-items-center">
-            {subastas.map((subasta, index) => (
-              <FormSubasta
-                key={index}
-                index={index}
-                catalogoMonedas={catalogoMonedas}
-                catalogoPinturas={catalogoPinturas}
-                setSubasta={setSubasta}
-                onDelete={onDelete}
-              />
-            ))}
+            {subastas.map((subasta, index) => {
+              console.log(index, subasta);
+              return (
+                <FormSubasta
+                  virtual={evento.tipo === "Virtual"}
+                  subasta={subasta}
+                  key={index}
+                  index={index}
+                  catalogoMonedas={catalogoMonedas}
+                  catalogoPinturas={catalogoPinturas}
+                  setSubasta={setSubasta}
+                  onDelete={onDelete}
+                />
+              );
+            })}
             <button
               type="button"
               className="btn btn-secondary col-1"
               onClick={onAgregarSubasta}
-              style={{ "max-height": "50px" }}
+              style={{ maxHeight: "50px" }}
             >
               Agregar
             </button>

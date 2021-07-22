@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "./Card";
 
 const FormSubasta = (props) => {
-  const [subasta, setSubasta] = useState({});
-  const { catalogoMonedas, catalogoPinturas, index } = props;
+  const [subasta, setSubasta] = useState(props.subasta);
+  const { catalogoMonedas, catalogoPinturas, index, virtual } = props;
+
+  useEffect(() => {
+    setSubasta(props.subasta);
+  }, [props.subasta]);
 
   return (
     <Card className="col-3">
@@ -89,7 +93,7 @@ const FormSubasta = (props) => {
         max="99999.99"
         step="0.01"
         name="gananciaMin"
-        min="0.01"
+        min="0.00"
         id="gananciaMin"
         onChange={(e) => {
           const value = e.target.value;
@@ -98,24 +102,28 @@ const FormSubasta = (props) => {
         }}
         className="form-control"
       />
-      <input
-        required
-        type="number"
-        value={subasta.duracionmin}
-        placeholder="Duración mínima (horas)"
-        name="duracionmin"
-        max="6"
-        min="1"
-        id="duracionmin"
-        onChange={(e) => {
-          let value = e.target.value;
-          console.log(value);
-          setSubasta({ ...subasta, duracionmin: value });
-          console.log(subasta);
-          props.setSubasta(index, { ...subasta, duracionmin: value });
-        }}
-        className="form-control"
-      />
+      {virtual === false ? (
+        <input
+          required
+          type="number"
+          value={subasta.duracionmin}
+          placeholder="Duración (minutos)"
+          name="duracionmin"
+          max="320"
+          min="1"
+          id="duracionmin"
+          onChange={(e) => {
+            let value = e.target.value;
+            console.log(value);
+            setSubasta({ ...subasta, duracionmin: value });
+            console.log(subasta);
+            props.setSubasta(index, { ...subasta, duracionmin: value });
+          }}
+          className="form-control"
+        />
+      ) : (
+        ""
+      )}
       <button
         type="button"
         className="btn btn-danger"

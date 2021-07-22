@@ -12,9 +12,13 @@ const Navbar = () => {
 
   const logout = () => {
     apiService.Logout();
-    history.push("/");
+    history.push("/login");
     setToken(apiService.getToken());
   };
+
+  setInterval(() => {
+    if (apiService.getToken() !== token) setToken(apiService.getToken());
+  }, 500);
 
   return (
     <div className="Navbar">

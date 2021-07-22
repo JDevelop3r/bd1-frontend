@@ -74,7 +74,7 @@ const inscribirEnEvento = async (idEvento) => {
     `${BASE_URL}participante/inscripcion/${idEvento}`,
     {},
     {
-      headers: { "content-type": "multipart/form-data", TOKEN: token },
+      headers: { "content-type": "application/json", TOKEN: token },
     }
   );
   console.log(res);
@@ -187,6 +187,12 @@ const getArtistas = async () => {
   return res.data;
 };
 
+const getListaObjeto = async (idEvento) => {
+  const res = await axios.get(`${BASE_URL}lista_objeto/evento/${idEvento}`);
+  console.log(res.data);
+  return res.data;
+};
+
 const crearArtista = async (form_data) => {
   const token = getToken();
   const res = await axios.post(`${BASE_URL}artista`, form_data, {
@@ -270,6 +276,7 @@ const apiService = {
   getMonedaId,
   getArtistas,
   getCatalogoOrganizadores,
+  getListaObjeto,
   crearArtista,
   crearMoneda,
   crearPintura,
